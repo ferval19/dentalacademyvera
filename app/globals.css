@@ -1,0 +1,83 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    font-size: 16px;
+  }
+  body {
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+}
+
+@layer utilities {
+  /* ── Gradients ─────────────────────────── */
+  .bg-hero-gradient {
+    background: linear-gradient(165deg, #1e2d3d 0%, #2d3e50 45%, #3a5068 100%);
+  }
+  .bg-cta-gradient {
+    background: linear-gradient(165deg, #1e2d3d, #2d3e50);
+  }
+  .bg-about-visual {
+    background: linear-gradient(135deg, #1e2d3d, #2d3e50);
+  }
+
+  /* ── Overlay patterns ────────────────── */
+  .hero-radial-overlay {
+    background:
+      radial-gradient(ellipse 70% 50% at 75% 35%, rgba(43, 181, 160, 0.12) 0%, transparent 60%),
+      radial-gradient(ellipse 50% 50% at 20% 80%, rgba(43, 181, 160, 0.06) 0%, transparent 50%);
+  }
+  .hero-grid-pattern {
+    background-image:
+      repeating-linear-gradient(90deg, white 0px, white 1px, transparent 1px, transparent 80px),
+      repeating-linear-gradient(0deg, white 0px, white 1px, transparent 1px, transparent 80px);
+  }
+  .cta-radial-overlay {
+    background: radial-gradient(ellipse at 50% 100%, rgba(43, 181, 160, 0.08), transparent 60%);
+  }
+  .about-radial-overlay {
+    background: radial-gradient(ellipse at 80% 20%, rgba(43, 181, 160, 0.1), transparent 60%);
+  }
+
+  /* ── Feature card top-border on hover ── */
+  .feature-card-bar {
+    position: relative;
+    overflow: hidden;
+  }
+  .feature-card-bar::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 3px;
+    background: linear-gradient(90deg, #2bb5a0, #a8e6d8);
+    opacity: 0;
+    transition: opacity 0.4s;
+  }
+  .feature-card-bar:hover::before {
+    opacity: 1;
+  }
+
+  /* ── Nav link underline animation ──────── */
+  .nav-link {
+    position: relative;
+  }
+  .nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -4px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #2bb5a0;
+    transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+  .nav-link:hover::after {
+    width: 100%;
+  }
+}

@@ -1,0 +1,932 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dental Academy Vera — Formación dental de excelencia</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=DM+Sans:wght@300;400;500;600;700&family=Outfit:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  /* Logo-derived palette */
+  --navy: #2D3E50;
+  --navy-deep: #1E2D3D;
+  --navy-light: #3A5068;
+  --teal: #2BB5A0;
+  --teal-dark: #239E8B;
+  --teal-light: #E6F7F4;
+  --teal-50: #F0FAF8;
+  --mint: #A8E6D8;
+  --white: #FFFFFF;
+  --off-white: #F5F8FA;
+  --bg-light: #EDF1F5;
+  --gray-100: #F1F3F5;
+  --gray-200: #E2E7EC;
+  --gray-300: #D1D8E0;
+  --gray-400: #A4B0BD;
+  --gray-500: #6C7A89;
+  --gray-600: #4A5568;
+  --gray-700: #2D3748;
+  --gray-800: #1A202C;
+  --font-display: 'Playfair Display', Georgia, serif;
+  --font-body: 'DM Sans', -apple-system, sans-serif;
+  --font-label: 'Outfit', -apple-system, sans-serif;
+  --shadow-sm: 0 1px 3px rgba(45,62,80,0.06);
+  --shadow-md: 0 4px 16px rgba(45,62,80,0.08);
+  --shadow-lg: 0 12px 40px rgba(45,62,80,0.10);
+  --shadow-xl: 0 24px 60px rgba(45,62,80,0.13);
+  --radius: 12px;
+  --radius-lg: 20px;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--font-body);
+  color: var(--gray-600);
+  background: var(--white);
+  line-height: 1.7;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+}
+.container { max-width: 1200px; margin: 0 auto; padding: 0 24px; }
+img { max-width: 100%; height: auto; display: block; }
+a { text-decoration: none; color: inherit; }
+
+/* ===== NAV ===== */
+.nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  background: rgba(255,255,255,0.94);
+  backdrop-filter: blur(20px) saturate(180%);
+  -webkit-backdrop-filter: blur(20px) saturate(180%);
+  border-bottom: 1px solid rgba(45,62,80,0.06);
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.nav.scrolled { box-shadow: var(--shadow-md); }
+.nav-inner {
+  display: flex; align-items: center; justify-content: space-between;
+  max-width: 1200px; margin: 0 auto; padding: 0 24px; height: 72px;
+}
+.nav-logo {
+  display: flex; align-items: center; gap: 12px;
+}
+.nav-logo img { height: 44px; width: auto; }
+.nav-logo-text {
+  font-family: var(--font-label); font-weight: 600;
+  font-size: 1.1rem; letter-spacing: 0.08em;
+  text-transform: uppercase; color: var(--navy);
+  line-height: 1.15;
+}
+.nav-logo-text span { color: var(--teal); display: block; font-weight: 500; }
+.nav-links { display: flex; gap: 32px; align-items: center; }
+.nav-links a {
+  font-family: var(--font-body); font-size: 0.9rem;
+  font-weight: 500; color: var(--gray-500);
+  transition: color 0.3s; position: relative;
+}
+.nav-links a::after {
+  content: ''; position: absolute; bottom: -4px; left: 0;
+  width: 0; height: 2px; background: var(--teal);
+  transition: width 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.nav-links a:hover { color: var(--navy); }
+.nav-links a:hover::after { width: 100%; }
+.nav-cta {
+  background: var(--teal); color: var(--white) !important;
+  padding: 10px 24px; border-radius: 8px;
+  font-weight: 600; font-size: 0.85rem; letter-spacing: 0.02em;
+  transition: all 0.3s;
+}
+.nav-cta::after { display: none !important; }
+.nav-cta:hover { background: var(--teal-dark); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(43,181,160,0.3); }
+.nav-toggle { display: none; background: none; border: none; cursor: pointer; padding: 8px; }
+.nav-toggle span {
+  display: block; width: 24px; height: 2px; background: var(--navy);
+  margin: 5px 0; transition: all 0.3s;
+}
+
+/* ===== HERO ===== */
+.hero {
+  position: relative; min-height: 100vh;
+  display: flex; align-items: center;
+  background: linear-gradient(165deg, var(--navy-deep) 0%, var(--navy) 45%, var(--navy-light) 100%);
+  overflow: hidden; padding-top: 72px;
+}
+.hero::before {
+  content: ''; position: absolute; inset: 0;
+  background:
+    radial-gradient(ellipse 70% 50% at 75% 35%, rgba(43,181,160,0.12) 0%, transparent 60%),
+    radial-gradient(ellipse 50% 50% at 20% 80%, rgba(43,181,160,0.06) 0%, transparent 50%);
+}
+.hero-pattern {
+  position: absolute; inset: 0; opacity: 0.025;
+  background-image:
+    repeating-linear-gradient(90deg, var(--white) 0px, var(--white) 1px, transparent 1px, transparent 80px),
+    repeating-linear-gradient(0deg, var(--white) 0px, var(--white) 1px, transparent 1px, transparent 80px);
+}
+.hero-content {
+  position: relative; z-index: 2;
+  max-width: 1200px; margin: 0 auto; padding: 80px 24px;
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px; align-items: center;
+}
+.hero-text { color: var(--white); }
+.hero-badge {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(43,181,160,0.12); border: 1px solid rgba(43,181,160,0.25);
+  padding: 8px 16px; border-radius: 100px;
+  font-family: var(--font-label); font-size: 0.78rem; font-weight: 500;
+  letter-spacing: 0.06em; text-transform: uppercase; margin-bottom: 28px;
+  animation: fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.1s both;
+}
+.hero-badge .dot {
+  width: 6px; height: 6px; background: var(--teal);
+  border-radius: 50%; animation: pulse 2s infinite;
+}
+.hero h1 {
+  font-family: var(--font-display); font-size: clamp(2.5rem, 5vw, 3.8rem);
+  font-weight: 700; line-height: 1.15; margin-bottom: 24px;
+  animation: fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.2s both;
+}
+.hero h1 em {
+  font-style: italic; color: var(--teal);
+  position: relative;
+}
+.hero-subtitle {
+  font-size: 1.12rem; line-height: 1.75; opacity: 0.82;
+  max-width: 500px; margin-bottom: 36px;
+  animation: fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.35s both;
+}
+.hero-actions {
+  display: flex; gap: 16px; flex-wrap: wrap;
+  animation: fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.5s both;
+}
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  padding: 14px 32px; border-radius: 10px;
+  font-family: var(--font-body); font-weight: 600;
+  font-size: 0.95rem; border: none; cursor: pointer;
+  transition: all 0.3s cubic-bezier(0.22,1,0.36,1);
+}
+.btn-primary { background: var(--teal); color: var(--white); }
+.btn-primary:hover { background: var(--teal-dark); transform: translateY(-2px); box-shadow: 0 8px 30px rgba(43,181,160,0.35); }
+.btn-outline {
+  background: transparent; color: var(--white);
+  border: 1.5px solid rgba(255,255,255,0.25);
+}
+.btn-outline:hover { border-color: rgba(255,255,255,0.5); background: rgba(255,255,255,0.05); }
+
+.hero-visual {
+  position: relative;
+  animation: fadeInUp 0.8s cubic-bezier(0.22,1,0.36,1) 0.4s both;
+}
+.hero-card {
+  background: rgba(255,255,255,0.06);
+  border: 1px solid rgba(255,255,255,0.1);
+  border-radius: var(--radius-lg); padding: 40px;
+  backdrop-filter: blur(20px);
+}
+.hero-stats { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.stat-item { text-align: center; color: var(--white); }
+.stat-number {
+  font-family: var(--font-display); font-size: 2.8rem;
+  font-weight: 700; color: var(--teal); line-height: 1;
+}
+.stat-label {
+  font-family: var(--font-label); font-size: 0.82rem;
+  opacity: 0.65; margin-top: 6px; letter-spacing: 0.03em;
+}
+.hero-testimonial {
+  margin-top: 32px; padding-top: 24px;
+  border-top: 1px solid rgba(255,255,255,0.1);
+  color: var(--white);
+}
+.hero-testimonial p {
+  font-style: italic; font-family: var(--font-display);
+  font-size: 1rem; opacity: 0.8; margin-bottom: 12px;
+}
+.hero-testimonial .author {
+  font-size: 0.8rem; opacity: 0.5; font-style: normal;
+  font-family: var(--font-label);
+}
+
+/* ===== SECTION COMMON ===== */
+section { padding: 100px 0; }
+.section-label {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-label); font-size: 0.75rem;
+  font-weight: 600; letter-spacing: 0.14em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 16px;
+}
+.section-label::before {
+  content: ''; width: 24px; height: 2px; background: var(--teal);
+}
+.section-title {
+  font-family: var(--font-display); font-size: clamp(2rem, 3.5vw, 2.8rem);
+  font-weight: 700; color: var(--navy); line-height: 1.2;
+  margin-bottom: 16px;
+}
+.section-subtitle {
+  font-size: 1.05rem; color: var(--gray-500); max-width: 560px;
+  line-height: 1.7;
+}
+.section-header { margin-bottom: 56px; }
+.section-header.center { text-align: center; }
+.section-header.center .section-subtitle { margin: 0 auto; }
+
+/* ===== FEATURES ===== */
+.features { background: var(--off-white); }
+.features-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+}
+.feature-card {
+  background: var(--white); border-radius: var(--radius);
+  padding: 36px 32px; border: 1px solid var(--gray-200);
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+  position: relative; overflow: hidden;
+}
+.feature-card::before {
+  content: ''; position: absolute; top: 0; left: 0;
+  width: 100%; height: 3px;
+  background: linear-gradient(90deg, var(--teal), var(--mint));
+  opacity: 0; transition: opacity 0.4s;
+}
+.feature-card:hover {
+  transform: translateY(-4px); box-shadow: var(--shadow-lg);
+  border-color: transparent;
+}
+.feature-card:hover::before { opacity: 1; }
+.feature-icon {
+  width: 52px; height: 52px; border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 1.5rem; margin-bottom: 20px;
+  background: var(--teal-light); color: var(--teal);
+}
+.feature-card h3 {
+  font-family: var(--font-display); font-size: 1.2rem;
+  font-weight: 600; color: var(--navy); margin-bottom: 10px;
+}
+.feature-card p { font-size: 0.9rem; color: var(--gray-500); line-height: 1.65; }
+
+/* ===== COURSES ===== */
+.courses { background: var(--white); }
+.courses-filter {
+  display: flex; gap: 10px; margin-bottom: 40px; flex-wrap: wrap;
+}
+.filter-btn {
+  padding: 8px 20px; border-radius: 100px; border: 1.5px solid var(--gray-200);
+  background: var(--white); font-family: var(--font-label);
+  font-size: 0.82rem; font-weight: 500; color: var(--gray-500);
+  cursor: pointer; transition: all 0.3s; letter-spacing: 0.02em;
+}
+.filter-btn:hover { border-color: var(--teal); color: var(--teal); }
+.filter-btn.active { border-color: var(--teal); color: var(--white); background: var(--teal); }
+
+.courses-grid {
+  display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px;
+}
+.course-card {
+  background: var(--white); border-radius: var(--radius-lg);
+  border: 1px solid var(--gray-200); overflow: hidden;
+  transition: all 0.4s cubic-bezier(0.22,1,0.36,1);
+}
+.course-card:hover {
+  transform: translateY(-6px); box-shadow: var(--shadow-xl);
+  border-color: transparent;
+}
+.course-img {
+  position: relative; height: 200px; overflow: hidden;
+}
+.course-img-inner {
+  width: 100%; height: 100%; display: flex;
+  align-items: center; justify-content: center;
+  font-size: 3rem; opacity: 0.25; color: var(--white);
+}
+.course-badge {
+  position: absolute; top: 16px; left: 16px;
+  font-family: var(--font-label);
+  font-size: 0.68rem; font-weight: 700; letter-spacing: 0.06em;
+  text-transform: uppercase; padding: 5px 12px; border-radius: 6px;
+  background: var(--navy); color: var(--white);
+}
+.course-badge.online { background: var(--teal); }
+.course-badge.hibrido { background: #6C5CE7; }
+.course-spots {
+  position: absolute; top: 16px; right: 16px;
+  background: rgba(0,0,0,0.45); color: var(--white);
+  font-family: var(--font-label); font-size: 0.68rem;
+  font-weight: 600; padding: 5px 10px;
+  border-radius: 6px; backdrop-filter: blur(8px);
+}
+.course-body { padding: 24px; }
+.course-category {
+  font-family: var(--font-label); font-size: 0.7rem;
+  font-weight: 600; letter-spacing: 0.1em;
+  text-transform: uppercase; color: var(--teal); margin-bottom: 8px;
+}
+.course-body h3 {
+  font-family: var(--font-display); font-size: 1.15rem;
+  font-weight: 600; color: var(--navy); line-height: 1.35;
+  margin-bottom: 12px; min-height: 62px;
+}
+.course-meta {
+  display: flex; flex-wrap: wrap; gap: 16px;
+  font-size: 0.8rem; color: var(--gray-500); margin-bottom: 16px;
+}
+.course-meta span { display: flex; align-items: center; gap: 5px; }
+.course-footer {
+  display: flex; align-items: center; justify-content: space-between;
+  padding-top: 16px; border-top: 1px solid var(--gray-100);
+}
+.course-price {
+  font-family: var(--font-display); font-size: 1.5rem;
+  font-weight: 700; color: var(--navy);
+}
+.course-price .from {
+  font-family: var(--font-label); font-size: 0.7rem;
+  font-weight: 400; color: var(--gray-400); display: block;
+  letter-spacing: 0.03em;
+}
+.course-btn {
+  padding: 10px 22px; border-radius: 8px;
+  background: var(--teal); color: var(--white);
+  font-family: var(--font-body); font-size: 0.82rem;
+  font-weight: 600; transition: all 0.3s; border: none; cursor: pointer;
+}
+.course-btn:hover { background: var(--teal-dark); transform: translateY(-1px); }
+
+/* ===== PROFESSORS ===== */
+.professors { background: var(--off-white); }
+.professors-grid {
+  display: grid; grid-template-columns: repeat(4, 1fr); gap: 24px;
+}
+.professor-card { text-align: center; }
+.professor-avatar {
+  width: 120px; height: 120px; border-radius: 50%;
+  margin: 0 auto 16px; overflow: hidden;
+  border: 3px solid var(--white); box-shadow: var(--shadow-md);
+  background: linear-gradient(135deg, var(--navy), var(--navy-light));
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-label); font-size: 1.6rem;
+  color: var(--teal); font-weight: 700; letter-spacing: 0.05em;
+}
+.professor-card h3 {
+  font-family: var(--font-display); font-size: 1.05rem;
+  font-weight: 600; color: var(--navy); margin-bottom: 4px;
+}
+.professor-card .specialty {
+  font-family: var(--font-label); font-size: 0.78rem;
+  color: var(--teal); font-weight: 600; margin-bottom: 6px;
+  letter-spacing: 0.04em; text-transform: uppercase;
+}
+.professor-card .bio {
+  font-size: 0.78rem; color: var(--gray-500); line-height: 1.5;
+}
+
+/* ===== ABOUT ===== */
+.about { background: var(--white); }
+.about-grid {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 60px;
+  align-items: center;
+}
+.about-visual {
+  position: relative; border-radius: var(--radius-lg); overflow: hidden;
+  background: linear-gradient(135deg, var(--navy-deep), var(--navy));
+  padding: 60px 40px; min-height: 420px;
+  display: flex; flex-direction: column; justify-content: flex-end;
+  color: var(--white);
+}
+.about-visual::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 80% 20%, rgba(43,181,160,0.1), transparent 60%);
+}
+.about-visual blockquote {
+  position: relative; z-index: 1;
+  font-family: var(--font-display); font-size: 1.4rem;
+  font-style: italic; line-height: 1.5; margin-bottom: 16px;
+}
+.about-visual cite {
+  position: relative; z-index: 1;
+  font-style: normal; font-family: var(--font-label);
+  font-size: 0.85rem; opacity: 0.65; letter-spacing: 0.03em;
+}
+.about-text .section-label { margin-bottom: 12px; }
+.about-text h2 {
+  font-family: var(--font-display); font-size: 2rem;
+  color: var(--navy); margin-bottom: 20px; line-height: 1.25;
+}
+.about-text p { margin-bottom: 16px; color: var(--gray-600); }
+.about-text .location-tag {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: var(--teal-light); padding: 10px 18px;
+  border-radius: 8px; font-family: var(--font-label);
+  font-size: 0.82rem; font-weight: 500;
+  color: var(--navy); margin-top: 12px; letter-spacing: 0.02em;
+}
+
+/* ===== CTA ===== */
+.cta-section {
+  background: linear-gradient(165deg, var(--navy-deep), var(--navy));
+  padding: 80px 0; text-align: center; color: var(--white);
+  position: relative; overflow: hidden;
+}
+.cta-section::before {
+  content: ''; position: absolute; inset: 0;
+  background: radial-gradient(ellipse at 50% 100%, rgba(43,181,160,0.08), transparent 60%);
+}
+.cta-section .container { position: relative; z-index: 1; }
+.cta-section h2 {
+  font-family: var(--font-display); font-size: clamp(1.8rem, 3vw, 2.5rem);
+  margin-bottom: 16px;
+}
+.cta-section p {
+  font-size: 1.05rem; opacity: 0.75; max-width: 500px;
+  margin: 0 auto 32px;
+}
+.cta-actions { display: flex; gap: 16px; justify-content: center; flex-wrap: wrap; }
+.btn-whatsapp { background: #25D366; color: var(--white); font-weight: 600; }
+.btn-whatsapp:hover { background: #20BD5A; transform: translateY(-2px); }
+
+/* ===== FOOTER ===== */
+.footer {
+  background: var(--gray-800); color: var(--gray-400);
+  padding: 60px 0 32px;
+}
+.footer-grid {
+  display: grid; grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 40px; margin-bottom: 48px;
+}
+.footer-brand .footer-logo {
+  font-family: var(--font-label); font-size: 1.05rem;
+  font-weight: 600; color: var(--white); margin-bottom: 12px;
+  letter-spacing: 0.08em; text-transform: uppercase;
+}
+.footer-brand .footer-logo span { color: var(--teal); }
+.footer-brand p { font-size: 0.85rem; line-height: 1.6; }
+.footer h4 {
+  font-family: var(--font-label); font-size: 0.85rem;
+  font-weight: 600; color: var(--white); margin-bottom: 16px;
+  letter-spacing: 0.06em; text-transform: uppercase;
+}
+.footer ul { list-style: none; }
+.footer ul li { margin-bottom: 8px; }
+.footer ul a { font-size: 0.85rem; transition: color 0.3s; }
+.footer ul a:hover { color: var(--teal); }
+.footer-bottom {
+  border-top: 1px solid rgba(255,255,255,0.08);
+  padding-top: 24px; text-align: center;
+  font-size: 0.8rem;
+}
+
+/* ===== ANIMATIONS ===== */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; }
+  50% { opacity: 0.4; }
+}
+.animate-on-scroll {
+  opacity: 0; transform: translateY(30px);
+  transition: all 0.7s cubic-bezier(0.22,1,0.36,1);
+}
+.animate-on-scroll.visible { opacity: 1; transform: translateY(0); }
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 1024px) {
+  .hero-content { grid-template-columns: 1fr; text-align: center; }
+  .hero-subtitle { margin-left: auto; margin-right: auto; }
+  .hero-actions { justify-content: center; }
+  .hero-visual { max-width: 480px; margin: 0 auto; }
+  .courses-grid { grid-template-columns: repeat(2, 1fr); }
+  .professors-grid { grid-template-columns: repeat(2, 1fr); }
+  .about-grid { grid-template-columns: 1fr; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+@media (max-width: 768px) {
+  section { padding: 64px 0; }
+  .nav-links { display: none; }
+  .nav-toggle { display: block; }
+  .nav-links.open {
+    display: flex; flex-direction: column;
+    position: absolute; top: 72px; left: 0; right: 0;
+    background: var(--white); padding: 24px;
+    box-shadow: var(--shadow-lg); gap: 16px;
+  }
+  .features-grid { grid-template-columns: 1fr; }
+  .courses-grid { grid-template-columns: 1fr; }
+  .professors-grid { grid-template-columns: 1fr 1fr; }
+  .footer-grid { grid-template-columns: 1fr; }
+  .hero-stats { grid-template-columns: 1fr 1fr; gap: 16px; }
+}
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav class="nav" id="nav">
+  <div class="nav-inner">
+    <a href="#" class="nav-logo">
+      <div class="nav-logo-text">Dental Academy <span>Vera</span></div>
+    </a>
+    <div class="nav-links" id="navLinks">
+      <a href="#cursos">Cursos</a>
+      <a href="#profesores">Profesores</a>
+      <a href="#nosotros">Sobre nosotros</a>
+      <a href="#contacto" class="nav-cta">Contactar</a>
+    </div>
+    <button class="nav-toggle" id="navToggle" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-pattern"></div>
+  <div class="hero-content">
+    <div class="hero-text">
+      <div class="hero-badge"><span class="dot"></span> Formación dental en Vera, Almería</div>
+      <h1>Impulsa tu carrera con formación dental de <em>excelencia</em></h1>
+      <p class="hero-subtitle">Cursos presenciales y online impartidos por profesionales referentes del sector. Formación práctica, actualizada y diseñada para transformar tu práctica clínica.</p>
+      <div class="hero-actions">
+        <a href="#cursos" class="btn btn-primary">Ver cursos →</a>
+        <a href="#contacto" class="btn btn-outline">Solicitar información</a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-card">
+        <div class="hero-stats">
+          <div class="stat-item">
+            <div class="stat-number">12+</div>
+            <div class="stat-label">Cursos disponibles</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">8</div>
+            <div class="stat-label">Especialidades</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">95%</div>
+            <div class="stat-label">Satisfacción</div>
+          </div>
+          <div class="stat-item">
+            <div class="stat-number">100%</div>
+            <div class="stat-label">Práctica clínica</div>
+          </div>
+        </div>
+        <div class="hero-testimonial">
+          <p>"La formación más práctica y aplicable que he recibido en mi carrera profesional."</p>
+          <div class="author">— Dra. María López, Odontóloga</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FEATURES -->
+<section class="features">
+  <div class="container">
+    <div class="section-header center animate-on-scroll">
+      <div class="section-label">¿Por qué elegirnos?</div>
+      <h2 class="section-title">Formación diseñada para<br>profesionales exigentes</h2>
+      <p class="section-subtitle">Combinamos la experiencia clínica real con metodologías de aprendizaje modernas para que cada curso transforme tu práctica diaria.</p>
+    </div>
+    <div class="features-grid">
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🎯</div>
+        <h3>Práctica intensiva</h3>
+        <p>Aprende haciendo. Nuestros cursos priorizan la práctica clínica sobre la teoría, con casos reales y hands-on desde el primer momento.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">👨‍⚕️</div>
+        <h3>Profesores referentes</h3>
+        <p>Formadores con experiencia clínica contrastada y reconocimiento en el sector. Aprende directamente de quienes lideran cada especialidad.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">📋</div>
+        <h3>Grupos reducidos</h3>
+        <p>Máximo 15-20 alumnos por curso para garantizar una atención personalizada y la oportunidad de resolver todas tus dudas.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🏅</div>
+        <h3>Certificación incluida</h3>
+        <p>Todos nuestros cursos incluyen certificado de asistencia y aprovechamiento. Avanzamos hacia la acreditación CFC.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">💰</div>
+        <h3>Precios accesibles</h3>
+        <p>Formación de alta calidad a precios competitivos. Ofrecemos facilidades de pago y descuentos por reserva anticipada.</p>
+      </div>
+      <div class="feature-card animate-on-scroll">
+        <div class="feature-icon">🌊</div>
+        <h3>Ubicación privilegiada</h3>
+        <p>Vera, en la costa de Almería, combina formación con un entorno inmejorable. Aprende y disfruta del Mediterráneo.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- COURSES -->
+<section class="courses" id="cursos">
+  <div class="container">
+    <div class="section-header animate-on-scroll">
+      <div class="section-label">Catálogo formativo</div>
+      <h2 class="section-title">Próximos cursos</h2>
+      <p class="section-subtitle">Selecciona la especialidad que quieres potenciar y da el siguiente paso en tu carrera.</p>
+    </div>
+    <div class="courses-filter animate-on-scroll">
+      <button class="filter-btn active" data-filter="all">Todos</button>
+      <button class="filter-btn" data-filter="estetica">Estética</button>
+      <button class="filter-btn" data-filter="endodoncia">Endodoncia</button>
+      <button class="filter-btn" data-filter="ortodoncia">Ortodoncia</button>
+      <button class="filter-btn" data-filter="protesis">Prótesis</button>
+      <button class="filter-btn" data-filter="implantologia">Implantología</button>
+      <button class="filter-btn" data-filter="higienistas">Higienistas</button>
+      <button class="filter-btn" data-filter="gestion">Gestión</button>
+    </div>
+    <div class="courses-grid" id="coursesGrid">
+
+      <div class="course-card animate-on-scroll" data-category="estetica">
+        <div class="course-img" style="background: linear-gradient(135deg, #2D3E50, #2BB5A0);">
+          <div class="course-img-inner">🦷</div>
+          <span class="course-badge">Presencial</span>
+          <span class="course-spots">6 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Estética Dental</div>
+          <h3>Restauraciones Directas en Composite Anterior</h3>
+          <div class="course-meta">
+            <span>📅 15 Mar 2026</span>
+            <span>⏱ 8 horas</span>
+            <span>📍 Vera</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>350 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll" data-category="endodoncia">
+        <div class="course-img" style="background: linear-gradient(135deg, #1E2D3D, #3A5068);">
+          <div class="course-img-inner">🔬</div>
+          <span class="course-badge">Presencial</span>
+          <span class="course-spots">8 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Endodoncia</div>
+          <h3>Actualización en Endodoncia Clínica: Instrumentación y Obturación</h3>
+          <div class="course-meta">
+            <span>📅 12 Abr 2026</span>
+            <span>⏱ 8 horas</span>
+            <span>📍 Vera</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>280 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll" data-category="ortodoncia">
+        <div class="course-img" style="background: linear-gradient(135deg, #2D3E50, #6C5CE7);">
+          <div class="course-img-inner">😁</div>
+          <span class="course-badge hibrido">Híbrido</span>
+          <span class="course-spots">12 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Ortodoncia</div>
+          <h3>Alineadores Transparentes: Planificación y Casos Clínicos</h3>
+          <div class="course-meta">
+            <span>📅 9 May 2026</span>
+            <span>⏱ 16 horas (2 días)</span>
+            <span>📍 Vera + Online</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>450 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll" data-category="protesis">
+        <div class="course-img" style="background: linear-gradient(135deg, #1E2D3D, #2BB5A0);">
+          <div class="course-img-inner">🏗</div>
+          <span class="course-badge">Presencial</span>
+          <span class="course-spots">6 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Prótesis</div>
+          <h3>Prótesis Completa Estática y Estética: Técnica de Succión</h3>
+          <div class="course-meta">
+            <span>📅 6 Jun 2026</span>
+            <span>⏱ 16 horas (2 días)</span>
+            <span>📍 Vera</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>600 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll" data-category="higienistas">
+        <div class="course-img" style="background: linear-gradient(135deg, #239E8B, #A8E6D8);">
+          <div class="course-img-inner">📸</div>
+          <span class="course-badge online">Online</span>
+          <span class="course-spots">20 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Higienistas Dentales</div>
+          <h3>Fotografía Dental y Ortodoncia para Higienistas</h3>
+          <div class="course-meta">
+            <span>📅 18 Abr 2026</span>
+            <span>⏱ 6 horas</span>
+            <span>📍 Online en directo</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>150 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+
+      <div class="course-card animate-on-scroll" data-category="implantologia">
+        <div class="course-img" style="background: linear-gradient(135deg, #2D3E50, #3A5068);">
+          <div class="course-img-inner">⚙️</div>
+          <span class="course-badge">Presencial</span>
+          <span class="course-spots">6 plazas</span>
+        </div>
+        <div class="course-body">
+          <div class="course-category">Implantología</div>
+          <h3>Cirugía Guiada e Implantología Digital: Flujo Completo</h3>
+          <div class="course-meta">
+            <span>📅 4 Jul 2026</span>
+            <span>⏱ 16 horas (2 días)</span>
+            <span>📍 Vera</span>
+          </div>
+          <div class="course-footer">
+            <div class="course-price"><span class="from">desde</span>750 €</div>
+            <a href="#contacto" class="course-btn">Inscribirme</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- PROFESSORS -->
+<section class="professors" id="profesores">
+  <div class="container">
+    <div class="section-header center animate-on-scroll">
+      <div class="section-label">Nuestro equipo</div>
+      <h2 class="section-title">Profesores referentes del sector</h2>
+      <p class="section-subtitle">Aprende de profesionales con años de experiencia clínica y docente reconocida a nivel nacional.</p>
+    </div>
+    <div class="professors-grid">
+      <div class="professor-card animate-on-scroll">
+        <div class="professor-avatar">DR</div>
+        <h3>Dr. Nombre Apellido</h3>
+        <div class="specialty">Estética Dental</div>
+        <div class="bio">Especialista en restauraciones estéticas con más de 15 años de experiencia clínica.</div>
+      </div>
+      <div class="professor-card animate-on-scroll">
+        <div class="professor-avatar">DA</div>
+        <h3>Dra. Nombre Apellido</h3>
+        <div class="specialty">Endodoncia</div>
+        <div class="bio">Referente en endodoncia clínica y formadora en técnicas avanzadas de instrumentación.</div>
+      </div>
+      <div class="professor-card animate-on-scroll">
+        <div class="professor-avatar">DR</div>
+        <h3>Dr. Nombre Apellido</h3>
+        <div class="specialty">Ortodoncia</div>
+        <div class="bio">Experto en alineadores y ortodoncia digital con formación internacional.</div>
+      </div>
+      <div class="professor-card animate-on-scroll">
+        <div class="professor-avatar">DA</div>
+        <h3>Dra. Nombre Apellido</h3>
+        <div class="specialty">Implantología</div>
+        <div class="bio">Cirujana oral especializada en implantología digital y regeneración ósea.</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ABOUT -->
+<section class="about" id="nosotros">
+  <div class="container">
+    <div class="about-grid">
+      <div class="about-visual animate-on-scroll">
+        <blockquote>"Creemos que la formación continua no es un lujo, es la responsabilidad de cada profesional con sus pacientes."</blockquote>
+        <cite>— Equipo Dental Academy Vera</cite>
+      </div>
+      <div class="about-text animate-on-scroll">
+        <div class="section-label">Sobre nosotros</div>
+        <h2>Formación dental en el corazón del Mediterráneo</h2>
+        <p>Dental Academy Vera nace con la misión de acercar formación dental de primer nivel a profesionales que buscan actualizar sus conocimientos y mejorar su práctica clínica diaria.</p>
+        <p>Desde Vera (Almería), ofrecemos cursos presenciales intensivos en instalaciones equipadas con la última tecnología, combinados con formación online para llegar a profesionales de toda España y Latinoamérica.</p>
+        <p>Nuestro compromiso: cada curso debe generar un impacto directo y medible en la calidad de tu trabajo con pacientes.</p>
+        <div class="location-tag">📍 Vera, Almería — Costa mediterránea, excelentes conexiones</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section" id="contacto">
+  <div class="container">
+    <h2>¿Listo para dar el siguiente paso<br>en tu carrera profesional?</h2>
+    <p>Escríbenos y te asesoramos sobre el curso que mejor se adapta a tu perfil y objetivos.</p>
+    <div class="cta-actions">
+      <a href="https://wa.me/34600000000?text=Hola,%20me%20interesa%20recibir%20información%20sobre%20los%20cursos%20de%20Dental%20Academy%20Vera" class="btn btn-whatsapp" target="_blank">💬 WhatsApp directo</a>
+      <a href="mailto:info@dentalacademyvera.com" class="btn btn-primary">✉️ Enviar email</a>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="container">
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="footer-logo">Dental Academy <span>Vera</span></div>
+        <p>Formación dental de excelencia en Vera, Almería. Cursos presenciales y online para dentistas, higienistas y profesionales del sector.</p>
+      </div>
+      <div>
+        <h4>Cursos</h4>
+        <ul>
+          <li><a href="#">Estética Dental</a></li>
+          <li><a href="#">Endodoncia</a></li>
+          <li><a href="#">Ortodoncia</a></li>
+          <li><a href="#">Implantología</a></li>
+          <li><a href="#">Prótesis</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Academia</h4>
+        <ul>
+          <li><a href="#">Sobre nosotros</a></li>
+          <li><a href="#">Profesores</a></li>
+          <li><a href="#">Blog</a></li>
+          <li><a href="#">Contacto</a></li>
+        </ul>
+      </div>
+      <div>
+        <h4>Legal</h4>
+        <ul>
+          <li><a href="#">Aviso legal</a></li>
+          <li><a href="#">Privacidad</a></li>
+          <li><a href="#">Cookies</a></li>
+          <li><a href="#">Condiciones</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      © 2026 Dental Academy Vera. Todos los derechos reservados. | dentalacademyvera.com
+    </div>
+  </div>
+</footer>
+
+<script>
+const nav = document.getElementById('nav');
+window.addEventListener('scroll', () => nav.classList.toggle('scrolled', window.scrollY > 40));
+
+document.getElementById('navToggle').addEventListener('click', () => {
+  document.getElementById('navLinks').classList.toggle('open');
+});
+
+document.querySelectorAll('a[href^="#"]').forEach(a => {
+  a.addEventListener('click', e => {
+    e.preventDefault();
+    const target = document.querySelector(a.getAttribute('href'));
+    if (target) {
+      target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      document.getElementById('navLinks').classList.remove('open');
+    }
+  });
+});
+
+document.querySelectorAll('.filter-btn').forEach(btn => {
+  btn.addEventListener('click', () => {
+    document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    const filter = btn.dataset.filter;
+    document.querySelectorAll('.course-card').forEach(card => {
+      card.style.display = (filter === 'all' || card.dataset.category === filter) ? '' : 'none';
+    });
+  });
+});
+
+const observer = new IntersectionObserver((entries) => {
+  entries.forEach((entry, i) => {
+    if (entry.isIntersecting) {
+      setTimeout(() => entry.target.classList.add('visible'), i * 80);
+      observer.unobserve(entry.target);
+    }
+  });
+}, { threshold: 0.1, rootMargin: '0px 0px -40px 0px' });
+document.querySelectorAll('.animate-on-scroll').forEach(el => observer.observe(el));
+</script>
+
+</body>
+</html>
