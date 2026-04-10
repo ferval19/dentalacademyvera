@@ -31,14 +31,17 @@ export default function Footer() {
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-10 mb-12">
           {/* Brand + contact */}
           <div>
-            <div className="mb-4">
+            <div className="flex items-center gap-[10px] mb-4">
               <Image
-                src="/images/logo.png"
-                alt="Dental Academy Vera"
-                width={140}
-                height={46}
-                className="h-[46px] w-auto object-contain brightness-0 invert"
+                src="/images/logo-icon.png"
+                alt=""
+                width={34}
+                height={34}
+                className="h-[34px] w-auto object-contain flex-shrink-0 brightness-0 invert"
               />
+              <div className="font-label text-[1.05rem] font-semibold text-white tracking-[0.08em] uppercase">
+                Dental Academy <span className="text-teal">Vera</span>
+              </div>
             </div>
             <p className="text-[0.85rem] leading-[1.6] mb-5">
               Formación dental de excelencia en Vera, Almería. Cursos presenciales y online para

@@ -37,15 +37,19 @@ export default function Nav() {
     >
       <div className="flex items-center justify-between max-w-[1200px] mx-auto px-6 h-[72px]">
         {/* Logo */}
-        <Link href="/" className="flex items-center">
+        <Link href="/" className="flex items-center gap-[10px]">
           <Image
-            src="/images/logo.png"
-            alt="Dental Academy Vera"
-            width={140}
-            height={46}
-            className="h-[46px] w-auto object-contain"
+            src="/images/logo-icon.png"
+            alt=""
+            width={38}
+            height={38}
+            className="h-[38px] w-auto object-contain flex-shrink-0"
             priority
           />
+          <div className="font-label font-semibold text-[1.1rem] tracking-[0.08em] uppercase text-navy leading-[1.15]">
+            Dental Academy{' '}
+            <span className="text-teal block font-medium">Vera</span>
+          </div>
         </Link>
 
         {/* Desktop links */}
