@@ -94,18 +94,18 @@ export default async function CoursePage({ params }: Props) {
   const waLink = whatsappCourse(course.title)
 
   const META_PILLS = [
-    { icon: CalendarDays, text: course.date },
-    { icon: Clock, text: course.duration },
-    { icon: MapPin, text: course.location },
-    { icon: Users, text: `${course.spots} plazas` },
+    { icon: CalendarDays, text: course.date,             href: undefined },
+    { icon: Clock,        text: course.duration,         href: undefined },
+    { icon: MapPin,       text: course.location,         href: course.locationUrl },
+    { icon: Users,        text: `${course.spots} plazas`, href: undefined },
   ]
 
   const LOGISTICS = [
-    { icon: CalendarDays, label: 'Fecha', value: course.date },
-    { icon: Clock, label: 'Duración', value: course.duration },
-    { icon: MapPin, label: 'Lugar', value: course.location },
-    { icon: Users, label: 'Plazas', value: `Máximo ${course.spots}` },
-    { icon: GraduationCap, label: 'Modalidad', value: course.modality.charAt(0).toUpperCase() + course.modality.slice(1) },
+    { icon: CalendarDays, label: 'Fecha',     value: course.date,       href: undefined },
+    { icon: Clock,        label: 'Duración',  value: course.duration,   href: undefined },
+    { icon: MapPin,       label: 'Lugar',     value: course.location,   href: course.locationUrl },
+    { icon: Users,        label: 'Plazas',    value: `Máximo ${course.spots}`, href: undefined },
+    { icon: GraduationCap, label: 'Modalidad', value: course.modality.charAt(0).toUpperCase() + course.modality.slice(1), href: undefined },
   ]
 
   return (
@@ -175,13 +175,19 @@ export default async function CoursePage({ params }: Props) {
 
               {/* Quick info pills */}
               <div className="flex flex-wrap gap-3 lg:flex-col lg:items-end">
-                {META_PILLS.map(({ icon: Icon, text }) => (
+                {META_PILLS.map(({ icon: Icon, text, href }) => (
                   <div
                     key={text}
                     className="flex items-center gap-[10px] bg-white/10 border border-white/15 px-4 py-[9px] rounded-full font-body text-[0.88rem] text-white"
                   >
                     <Icon className="w-4 h-4 text-teal/80 flex-shrink-0 stroke-[1.75]" />
-                    <span>{text}</span>
+                    {href ? (
+                      <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-teal transition-colors">
+                        {text}
+                      </a>
+                    ) : (
+                      <span>{text}</span>
+                    )}
                   </div>
                 ))}
               </div>
@@ -322,7 +328,7 @@ export default async function CoursePage({ params }: Props) {
                 Detalles del curso
               </h3>
               <div className="space-y-4">
-                {LOGISTICS.map(({ icon: Icon, label, value }) => (
+                {LOGISTICS.map(({ icon: Icon, label, value, href }) => (
                   <div key={label} className="flex items-start gap-3">
                     <div className="w-8 h-8 rounded-[8px] bg-teal-light flex items-center justify-center flex-shrink-0 mt-[1px]">
                       <Icon className="w-4 h-4 text-teal stroke-[1.75]" />
@@ -331,11 +337,35 @@ export default async function CoursePage({ params }: Props) {
                       <div className="font-label text-[0.7rem] font-semibold tracking-[0.06em] uppercase text-gray-400">
                         {label}
                       </div>
-                      <div className="text-[0.95rem] text-navy font-medium">{value}</div>
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer"
+                           className="text-[0.95rem] text-teal font-medium hover:underline">
+                          {value}
+                        </a>
+                      ) : (
+                        <div className="text-[0.95rem] text-navy font-medium">{value}</div>
+                      )}
                     </div>
                   </div>
                 ))}
               </div>
+
+              {/* Includes */}
+              {course.includes && course.includes.length > 0 && (
+                <div className="mt-5 pt-5 border-t border-gray-200">
+                  <div className="font-label text-[0.72rem] font-semibold tracking-[0.12em] uppercase text-gray-400 mb-3">
+                    Incluido en el precio
+                  </div>
+                  <ul className="space-y-2">
+                    {course.includes.map((item) => (
+                      <li key={item} className="flex items-center gap-2 text-[0.9rem] text-gray-600">
+                        <span className="w-[6px] h-[6px] rounded-full bg-teal flex-shrink-0" />
+                        {item}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+              )}
             </div>
 
             {/* Professor sidebar */}

@@ -23,10 +23,10 @@ export default function Courses() {
   const waLink = whatsappCourse(course.title)
 
   const META = [
-    { icon: CalendarDays, value: course.date },
-    { icon: Clock, value: course.duration },
-    { icon: MapPin, value: course.location },
-    { icon: Users, value: `${course.spots} plazas` },
+    { icon: CalendarDays, value: course.date,       href: undefined },
+    { icon: Clock,        value: course.duration,   href: undefined },
+    { icon: MapPin,       value: course.location,   href: course.locationUrl },
+    { icon: Users,        value: `${course.spots} plazas`, href: undefined },
   ]
 
   return (
@@ -104,13 +104,31 @@ export default function Courses() {
 
                 {/* Meta grid */}
                 <div className="grid grid-cols-2 gap-x-4 gap-y-4 mb-7">
-                  {META.map(({ icon: Icon, value }) => (
+                  {META.map(({ icon: Icon, value, href }) => (
                     <div key={value} className="flex items-center gap-[10px] text-[0.88rem] text-white/70">
                       <Icon className="w-4 h-4 text-teal/80 flex-shrink-0 stroke-[1.75]" />
-                      <span>{value}</span>
+                      {href ? (
+                        <a href={href} target="_blank" rel="noopener noreferrer" className="hover:text-teal transition-colors underline underline-offset-2 decoration-white/20">
+                          {value}
+                        </a>
+                      ) : (
+                        <span>{value}</span>
+                      )}
                     </div>
                   ))}
                 </div>
+
+                {/* Includes */}
+                {course.includes && course.includes.length > 0 && (
+                  <div className="flex flex-wrap gap-2 mb-7">
+                    {course.includes.map((item) => (
+                      <span key={item} className="inline-flex items-center gap-[6px] bg-teal/15 border border-teal/25 text-teal font-label text-[0.72rem] font-semibold tracking-[0.04em] px-3 py-[5px] rounded-full">
+                        <span className="w-[5px] h-[5px] rounded-full bg-teal flex-shrink-0" />
+                        {item}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 {/* Professor mini */}
                 {professor && (

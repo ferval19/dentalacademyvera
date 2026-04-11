@@ -4,7 +4,7 @@ const STATS = [
   { number: '8h', label: 'Formación intensiva', icon: Clock },
   { number: '8', label: 'Plazas limitadas', icon: Users },
   { number: '100%', label: 'Práctica clínica', icon: FlaskConical },
-  { number: '5 Jun', label: 'Próxima edición', icon: CalendarDays },
+  { number: '29 May', label: 'Próxima edición', icon: CalendarDays },
 ]
 
 export default function Hero() {
@@ -19,7 +19,7 @@ export default function Hero() {
         <div className="text-white text-center lg:text-left">
           <div className="inline-flex items-center gap-2 bg-teal/[0.12] border border-teal/[0.25] px-4 py-[9px] rounded-full font-label text-[0.82rem] font-medium tracking-[0.06em] uppercase mb-8 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.1s_both]">
             <span className="w-[6px] h-[6px] bg-teal rounded-full animate-blink flex-shrink-0" />
-            Vera, Almería · 5 de junio de 2026
+            Vera, Almería · 29 de mayo de 2026
           </div>
 
           <h1 className="font-display text-[clamp(2.6rem,5vw,4rem)] font-bold leading-[1.12] mb-6 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.2s_both]">

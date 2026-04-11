@@ -32,6 +32,8 @@ export interface Course {
   gradient: string
   imageUrl?: string
   includesPractice?: boolean
+  locationUrl?: string
+  includes?: string[]
   program?: ProgramModule[]
   professorId?: string
 }
