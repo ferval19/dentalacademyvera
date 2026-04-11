@@ -26,7 +26,7 @@ export default function Professors() {
 
           {/* Left: Photo */}
           <AnimateOnScroll>
-            <div className="relative min-h-[440px] lg:min-h-[600px] bg-navy-deep overflow-hidden">
+            <div className="relative min-h-[440px] lg:min-h-[600px] bg-[#f0eeea] overflow-hidden">
               {professor.imageUrl ? (
                 <>
                   <Image
@@ -36,8 +36,8 @@ export default function Professors() {
                     className="object-cover object-top"
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
-                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-navy-deep/40 hidden lg:block pointer-events-none" />
-                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-navy-deep/55 lg:hidden pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-[#f0eeea]/50 hidden lg:block pointer-events-none" />
+                  <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f0eeea]/60 lg:hidden pointer-events-none" />
                 </>
               ) : (
                 <div className="w-full h-full flex items-center justify-center">

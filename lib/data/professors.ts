@@ -26,7 +26,7 @@ export const professors: Professor[] = [
         ],
       },
     ],
-    imageUrl: '/images/professors/rafael-ibanez-nobg.png',
+    imageUrl: '/images/professors/rafael-ibanez.jpg',
     avatarUrl: '/images/professors/rafael-ibanez-avatar.png',
   },
 ]

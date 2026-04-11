@@ -409,7 +409,7 @@ function ProfessorCard({
   return (
     <div className="bg-white border border-gray-200 rounded-xl overflow-hidden shadow-sm">
       {professor.imageUrl && (
-        <div className="relative h-52 overflow-hidden bg-navy-deep">
+        <div className="relative h-52 overflow-hidden bg-[#f0eeea]">
           <Image
             src={professor.imageUrl}
             alt={professor.name}
@@ -417,7 +417,7 @@ function ProfessorCard({
             className="object-cover object-top"
             sizes="360px"
           />
-          <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent" />
+          <div className="absolute inset-0 bg-gradient-to-t from-[#f0eeea]/40 via-transparent to-transparent" />
         </div>
       )}
       <div className="p-6">
