@@ -58,6 +58,7 @@ export interface Professor {
   credentials?: string[]
   credentialGroups?: CredentialGroup[]
   imageUrl?: string
+  avatarUrl?: string
 }
 
 export interface CourseFilter {

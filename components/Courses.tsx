@@ -133,8 +133,20 @@ export default function Courses() {
                 {/* Professor mini */}
                 {professor && (
                   <div className="flex items-center gap-3 py-4 border-t border-white/10 mb-7">
-                    <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-label text-[0.85rem] text-teal font-bold flex-shrink-0">
-                      {professor.initials}
+                    <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/20">
+                      {professor.avatarUrl ? (
+                        <Image
+                          src={professor.avatarUrl}
+                          alt={professor.name}
+                          width={40}
+                          height={40}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : (
+                        <div className="w-full h-full bg-white/10 flex items-center justify-center font-label text-[0.85rem] text-teal font-bold">
+                          {professor.initials}
+                        </div>
+                      )}
                     </div>
                     <div>
                       <div className="font-body font-semibold text-[0.95rem]">{professor.name}</div>

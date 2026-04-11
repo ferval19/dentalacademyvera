@@ -1,4 +1,6 @@
+import Image from 'next/image'
 import { Clock, Users, FlaskConical, CalendarDays } from 'lucide-react'
+import { professors } from '@/lib/data/professors'
 
 const STATS = [
   { number: '8h', label: 'Formación intensiva', icon: Clock },
@@ -6,6 +8,8 @@ const STATS = [
   { number: '100%', label: 'Práctica clínica', icon: FlaskConical },
   { number: '29 May', label: 'Próxima edición', icon: CalendarDays },
 ]
+
+const professor = professors[0]
 
 export default function Hero() {
   return (
@@ -76,8 +80,20 @@ export default function Hero() {
 
             <div className="mt-8 pt-6 border-t border-white/10 text-white">
               <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full bg-white/10 flex items-center justify-center font-label text-[0.8rem] text-teal font-bold flex-shrink-0">
-                  RI
+                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/20">
+                  {professor?.avatarUrl ? (
+                    <Image
+                      src={professor.avatarUrl}
+                      alt={professor.name}
+                      width={40}
+                      height={40}
+                      className="w-full h-full object-cover"
+                    />
+                  ) : (
+                    <div className="w-full h-full bg-white/10 flex items-center justify-center font-label text-[0.8rem] text-teal font-bold">
+                      RI
+                    </div>
+                  )}
                 </div>
                 <div>
                   <div className="font-display text-[0.98rem] font-semibold">Dr. Rafael Ibáñez</div>
