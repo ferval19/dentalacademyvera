@@ -4,7 +4,7 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   CalendarDays, Clock, MapPin, Users, MessageCircle, Phone,
-  Mail, GraduationCap, ChevronRight,
+  GraduationCap, ChevronRight,
 } from 'lucide-react'
 import { courses } from '@/lib/data/courses'
 import { professors } from '@/lib/data/professors'
@@ -311,13 +311,6 @@ export default async function CoursePage({ params }: Props) {
                 >
                   <Phone className="w-4 h-4 stroke-[2]" />
                   {CONTACT.phoneFormatted}
-                </a>
-                <a
-                  href={CONTACT.emailHref}
-                  className="flex items-center justify-center gap-2 w-full py-[14px] rounded-[8px] border border-gray-200 text-gray-600 font-body font-semibold text-[0.95rem] hover:border-teal hover:text-teal transition-colors"
-                >
-                  <Mail className="w-4 h-4 stroke-[1.75]" />
-                  {CONTACT.email}
                 </a>
               </div>
             </div>

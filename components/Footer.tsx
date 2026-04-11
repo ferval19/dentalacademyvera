@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import { Phone, Mail, MessageCircle } from 'lucide-react'
+import { Phone, MessageCircle } from 'lucide-react'
 import { CONTACT } from '@/lib/contact'
 
 const FOOTER_LINKS = {
@@ -16,12 +16,6 @@ const FOOTER_LINKS = {
     { label: 'Blog', href: '#' },
     { label: 'Contacto', href: '#contacto' },
   ],
-  legal: [
-    { label: 'Aviso legal', href: '#' },
-    { label: 'Privacidad', href: '#' },
-    { label: 'Cookies', href: '#' },
-    { label: 'Condiciones', href: '#' },
-  ],
 }
 
 export default function Footer() {
@@ -29,7 +23,7 @@ export default function Footer() {
     <footer className="bg-gray-900 text-gray-400 pt-[64px] pb-8">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr_1fr] gap-10 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-10 mb-14">
           {/* Brand + contact */}
           <div>
             <div className="flex items-center gap-[10px] mb-5">
@@ -48,7 +42,6 @@ export default function Footer() {
               Formación dental de excelencia en Vera, Almería. Cursos presenciales y online para
               dentistas, higienistas y profesionales del sector.
             </p>
-            {/* Contact info */}
             <div className="space-y-3">
               <a
                 href={CONTACT.phoneTel}
@@ -56,13 +49,6 @@ export default function Footer() {
               >
                 <Phone className="w-4 h-4 text-teal flex-shrink-0 stroke-[1.75]" />
                 {CONTACT.phoneFormatted}
-              </a>
-              <a
-                href={CONTACT.emailHref}
-                className="flex items-center gap-3 text-[0.9rem] hover:text-teal transition-colors duration-300"
-              >
-                <Mail className="w-4 h-4 text-teal flex-shrink-0 stroke-[1.75]" />
-                {CONTACT.email}
               </a>
               <a
                 href={CONTACT.whatsappGeneral}
@@ -84,10 +70,7 @@ export default function Footer() {
             <ul className="space-y-[10px]">
               {FOOTER_LINKS.cursos.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-[0.9rem] hover:text-teal transition-colors duration-300"
-                  >
+                  <a href={link.href} className="text-[0.9rem] hover:text-teal transition-colors duration-300">
                     {link.label}
                   </a>
                 </li>
@@ -103,29 +86,7 @@ export default function Footer() {
             <ul className="space-y-[10px]">
               {FOOTER_LINKS.academia.map((link) => (
                 <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-[0.9rem] hover:text-teal transition-colors duration-300"
-                  >
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Legal */}
-          <div>
-            <h4 className="font-label text-[0.85rem] font-semibold text-white mb-5 tracking-[0.08em] uppercase">
-              Legal
-            </h4>
-            <ul className="space-y-[10px]">
-              {FOOTER_LINKS.legal.map((link) => (
-                <li key={link.label}>
-                  <a
-                    href={link.href}
-                    className="text-[0.9rem] hover:text-teal transition-colors duration-300"
-                  >
+                  <a href={link.href} className="text-[0.9rem] hover:text-teal transition-colors duration-300">
                     {link.label}
                   </a>
                 </li>

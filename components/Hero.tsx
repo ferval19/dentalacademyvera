@@ -2,7 +2,7 @@ import { Clock, Users, FlaskConical, CalendarDays } from 'lucide-react'
 
 const STATS = [
   { number: '8h', label: 'Formación intensiva', icon: Clock },
-  { number: '8', label: 'Plazas limitadas', icon: Users },
+  { number: '10', label: 'Plazas limitadas', icon: Users },
   { number: '100%', label: 'Práctica clínica', icon: FlaskConical },
   { number: '29 May', label: 'Próxima edición', icon: CalendarDays },
 ]

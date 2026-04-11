@@ -1,4 +1,4 @@
-import { MessageCircle, Phone, Mail } from 'lucide-react'
+import { MessageCircle, Phone } from 'lucide-react'
 import { CONTACT } from '@/lib/contact'
 
 export default function CTA() {
@@ -41,13 +41,6 @@ export default function CTA() {
           >
             <Phone className="w-5 h-5 stroke-[2]" />
             {CONTACT.phoneFormatted}
-          </a>
-          <a
-            href={CONTACT.emailHref}
-            className="inline-flex items-center gap-[10px] px-8 py-[15px] rounded-[10px] font-body font-semibold text-[1rem] bg-teal text-white hover:bg-teal-dark hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(43,181,160,0.4)] transition-all duration-300"
-          >
-            <Mail className="w-5 h-5 stroke-[2]" />
-            Email
           </a>
         </div>
       </div>

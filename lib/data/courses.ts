@@ -15,7 +15,7 @@ export const courses: Course[] = [
     locationUrl: 'https://theworkclub.es',
     price: 300,
     includes: ['Comida incluida', 'Coffee break'],
-    spots: 8,
+    spots: 10,
     emoji: '🔬',
     gradient: 'linear-gradient(135deg, #1E2D3D, #3A5068)',
     imageUrl: '/images/courses/endodoncia-clinica.jpg',
