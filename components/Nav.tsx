@@ -58,14 +58,14 @@ export default function Nav() {
             <Link
               key={link.anchor}
               href={href(link.anchor)}
-              className="nav-link font-body text-[0.9rem] font-medium text-gray-500 hover:text-navy transition-colors duration-300"
+              className="nav-link font-body text-[0.95rem] font-medium text-gray-500 hover:text-navy transition-colors duration-300"
             >
               {link.label}
             </Link>
           ))}
           <Link
             href={href('contacto')}
-            className="bg-teal text-white px-6 py-[10px] rounded-[8px] font-semibold text-[0.85rem] tracking-[0.02em] hover:bg-teal-dark hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(43,181,160,0.3)] transition-all duration-300"
+            className="bg-teal text-white px-6 py-[10px] rounded-[8px] font-semibold text-[0.9rem] tracking-[0.02em] hover:bg-teal-dark hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(43,181,160,0.3)] transition-all duration-300"
           >
             Contactar
           </Link>
