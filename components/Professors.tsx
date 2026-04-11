@@ -33,7 +33,7 @@ export default function Professors() {
                     src={professor.imageUrl}
                     alt={professor.name}
                     fill
-                    className="object-cover object-right"
+                    className="object-cover object-top"
                     sizes="(max-width: 1024px) 100vw, 40vw"
                   />
                   <div className="absolute inset-0 bg-gradient-to-r from-transparent via-transparent to-navy-deep/40 hidden lg:block pointer-events-none" />

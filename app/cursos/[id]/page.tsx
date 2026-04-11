@@ -414,7 +414,7 @@ function ProfessorCard({
             src={professor.imageUrl}
             alt={professor.name}
             fill
-            className="object-cover object-right"
+            className="object-cover object-top"
             sizes="360px"
           />
           <div className="absolute inset-0 bg-gradient-to-t from-navy-deep/60 via-transparent to-transparent" />
