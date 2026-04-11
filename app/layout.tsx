@@ -30,6 +30,13 @@ const SITE_NAME = 'Dental Academy Vera'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
+  icons: {
+    icon: [
+      { url: '/favicon.ico', sizes: '48x48' },
+      { url: '/images/logo-icon.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: [{ url: '/apple-icon.png', sizes: '180x180', type: 'image/png' }],
+  },
   title: {
     default: `${SITE_NAME} — Formación dental de excelencia`,
     template: `%s — ${SITE_NAME}`,

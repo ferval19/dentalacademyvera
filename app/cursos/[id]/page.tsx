@@ -164,7 +164,7 @@ export default async function CoursePage({ params }: Props) {
                 src={course.imageUrl}
                 alt={course.title}
                 fill
-                className="object-cover object-top opacity-15"
+                className="object-cover object-top opacity-20 scale-105 blur-sm"
                 priority
                 sizes="100vw"
               />

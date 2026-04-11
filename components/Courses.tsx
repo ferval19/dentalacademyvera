@@ -58,7 +58,7 @@ export default function Courses() {
                   src={course.imageUrl}
                   alt={course.title}
                   fill
-                  className="object-cover object-top"
+                  className="object-cover object-top scale-105 blur-sm"
                   sizes="(max-width: 1024px) 100vw, 60vw"
                   priority
                 />
