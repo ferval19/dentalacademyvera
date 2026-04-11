@@ -2,28 +2,19 @@ import Image from 'next/image'
 import { Phone, MessageCircle } from 'lucide-react'
 import { CONTACT } from '@/lib/contact'
 
-const FOOTER_LINKS = {
-  cursos: [
-    { label: 'Estética Dental', href: '#cursos' },
-    { label: 'Endodoncia', href: '#cursos' },
-    { label: 'Ortodoncia', href: '#cursos' },
-    { label: 'Implantología', href: '#cursos' },
-    { label: 'Prótesis', href: '#cursos' },
-  ],
-  academia: [
-    { label: 'Sobre nosotros', href: '#nosotros' },
-    { label: 'Profesores', href: '#profesores' },
-    { label: 'Blog', href: '#' },
-    { label: 'Contacto', href: '#contacto' },
-  ],
-}
+const FOOTER_LINKS = [
+  { label: 'Sobre nosotros', href: '#nosotros' },
+  { label: 'Profesores', href: '#profesores' },
+  { label: 'Cursos', href: '#cursos' },
+  { label: 'Contacto', href: '#contacto' },
+]
 
 export default function Footer() {
   return (
     <footer className="bg-gray-900 text-gray-400 pt-[64px] pb-8">
       <div className="max-w-[1200px] mx-auto px-6">
         {/* Grid */}
-        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-[2fr_1fr_1fr] gap-10 mb-14">
+        <div className="grid grid-cols-1 sm:grid-cols-[2fr_1fr] gap-10 mb-14">
           {/* Brand + contact */}
           <div>
             <div className="flex items-center gap-[10px] mb-5">
@@ -39,8 +30,8 @@ export default function Footer() {
               </div>
             </div>
             <p className="text-[0.9rem] leading-[1.7] mb-6">
-              Formación dental de excelencia en Vera, Almería. Cursos presenciales y online para
-              dentistas, higienistas y profesionales del sector.
+              Formación dental de excelencia en Vera, Almería. Cursos presenciales para
+              dentistas y profesionales del sector.
             </p>
             <div className="space-y-3">
               <a
@@ -62,29 +53,13 @@ export default function Footer() {
             </div>
           </div>
 
-          {/* Cursos */}
+          {/* Nav links */}
           <div>
             <h4 className="font-label text-[0.85rem] font-semibold text-white mb-5 tracking-[0.08em] uppercase">
-              Cursos
+              Navegación
             </h4>
             <ul className="space-y-[10px]">
-              {FOOTER_LINKS.cursos.map((link) => (
-                <li key={link.label}>
-                  <a href={link.href} className="text-[0.9rem] hover:text-teal transition-colors duration-300">
-                    {link.label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-          </div>
-
-          {/* Academia */}
-          <div>
-            <h4 className="font-label text-[0.85rem] font-semibold text-white mb-5 tracking-[0.08em] uppercase">
-              Academia
-            </h4>
-            <ul className="space-y-[10px]">
-              {FOOTER_LINKS.academia.map((link) => (
+              {FOOTER_LINKS.map((link) => (
                 <li key={link.label}>
                   <a href={link.href} className="text-[0.9rem] hover:text-teal transition-colors duration-300">
                     {link.label}
