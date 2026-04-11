@@ -1,7 +1,9 @@
 import type { MetadataRoute } from 'next'
 import { courses } from '@/lib/data/courses'
 
-const BASE = 'https://dentalacademyvera.com'
+const BASE =
+  process.env.NEXT_PUBLIC_SITE_URL ??
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://dentalacademyvera.com')
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const courseUrls: MetadataRoute.Sitemap = courses.map((course) => ({

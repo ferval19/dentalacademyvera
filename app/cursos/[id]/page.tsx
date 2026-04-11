@@ -32,18 +32,18 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const description =
     course.subtitle ??
     `Curso de ${course.categoryLabel} en ${course.location}. ${course.date}. Impartido por Dr. Rafael Ibáñez.`
-  const url = `${SITE_URL}/cursos/${id}`
+  const pageUrl = `${SITE_URL}/cursos/${id}`
 
   return {
     title,
     description,
-    alternates: { canonical: url },
+    alternates: { canonical: pageUrl },
     openGraph: {
       title,
       description,
-      url,
+      url: pageUrl,
       type: 'website',
-      images: [{ url: `${SITE_URL}/cursos/${id}/opengraph-image`, width: 1200, height: 630, alt: title }],
+      images: [{ url: `${SITE_URL}/cursos/${id}/opengraph-image`, width: 1200, height: 630, alt: `${title} — Dental Academy Vera` }],
     },
     twitter: {
       card: 'summary_large_image',
@@ -64,33 +64,63 @@ export default async function CoursePage({ params }: Props) {
     ? professors.find((p) => p.id === course.professorId)
     : undefined
 
+  const courseUrl = `${SITE_URL}/cursos/${course.id}`
+
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: course.title,
-    description: course.subtitle ?? `Curso de ${course.categoryLabel}`,
-    url: `${SITE_URL}/cursos/${course.id}`,
+    description:
+      course.subtitle ??
+      `Curso de ${course.categoryLabel} en ${course.location}. ${course.date}. Formación presencial impartida por referentes del sector.`,
+    url: courseUrl,
+    educationalLevel: 'Professional',
+    teaches: course.program?.flatMap((m) => m.topics) ?? [],
     provider: {
       '@type': 'EducationalOrganization',
       name: 'Dental Academy Vera',
-      sameAs: SITE_URL,
+      url: SITE_URL,
     },
     offers: {
       '@type': 'Offer',
-      price: String(course.price),
+      price: course.price,
       priceCurrency: 'EUR',
-      availability: 'https://schema.org/LimitedAvailability',
-      url: `${SITE_URL}/cursos/${course.id}`,
+      availability:
+        course.spots > 3
+          ? 'https://schema.org/InStock'
+          : 'https://schema.org/LimitedAvailability',
+      validFrom: new Date().toISOString().split('T')[0],
+      url: courseUrl,
     },
     hasCourseInstance: {
       '@type': 'CourseInstance',
-      courseMode: course.modality,
+      courseMode: course.modality === 'online' ? 'online' : 'onsite',
       startDate: course.dateISO,
-      location: { '@type': 'Place', name: course.location },
+      location: {
+        '@type': 'Place',
+        name: course.location,
+        ...(course.locationUrl && { url: course.locationUrl }),
+        address: { '@type': 'PostalAddress', addressLocality: 'Vera', addressRegion: 'Almería', addressCountry: 'ES' },
+      },
       ...(professor && {
-        instructor: { '@type': 'Person', name: professor.name, jobTitle: professor.specialty },
+        instructor: {
+          '@type': 'Person',
+          name: professor.name,
+          jobTitle: professor.specialty,
+          worksFor: { '@type': 'Organization', name: 'Dental Academy Vera' },
+        },
       }),
     },
+  }
+
+  const breadcrumbJsonLd = {
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: [
+      { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
+      { '@type': 'ListItem', position: 2, name: 'Cursos', item: `${SITE_URL}/#cursos` },
+      { '@type': 'ListItem', position: 3, name: course.title, item: courseUrl },
+    ],
   }
 
   const waLink = whatsappCourse(course.title)
@@ -118,6 +148,10 @@ export default async function CoursePage({ params }: Props) {
         type="application/ld+json"
         dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
       />
+      <script
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbJsonLd) }}
+      />
 
       <main className="pt-[72px]">
         {/* ── Hero ────────────────────────────────────────────── */}
@@ -128,7 +162,7 @@ export default async function CoursePage({ params }: Props) {
             <div className="absolute inset-0">
               <Image
                 src={course.imageUrl}
-                alt=""
+                alt={course.title}
                 fill
                 className="object-cover object-top opacity-15"
                 priority

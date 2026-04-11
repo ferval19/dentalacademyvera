@@ -22,7 +22,7 @@ export default function Professors() {
         </AnimateOnScroll>
 
         {/* ── Magazine layout ───────────────────────────────── */}
-        <div className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-0 rounded-xl overflow-hidden border border-gray-200 shadow-lg">
+        <article className="grid grid-cols-1 lg:grid-cols-[2fr_3fr] gap-0 rounded-xl overflow-hidden border border-gray-200 shadow-lg">
 
           {/* Left: Photo */}
           <AnimateOnScroll>
@@ -109,7 +109,7 @@ export default function Professors() {
               </div>
             </div>
           </AnimateOnScroll>
-        </div>
+        </article>
       </div>
     </section>
   )

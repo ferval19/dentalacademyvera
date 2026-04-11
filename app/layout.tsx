@@ -37,13 +37,14 @@ export const metadata: Metadata = {
   description:
     'Formación dental de excelencia en Vera, Almería. Cursos presenciales y online impartidos por profesionales referentes del sector. Endodoncia, estética, implantología y más.',
   keywords: [
-    'formación dental',
+    'formación dental Vera Almería',
     'cursos odontología',
-    'endodoncia',
-    'dental academy',
-    'vera almería',
-    'formación odontológica',
-    'cursos dentistas',
+    'curso endodoncia clínica',
+    'dental academy vera',
+    'formación odontológica presencial',
+    'cursos dentistas Almería',
+    'endodoncia microscópica',
+    'Dr Rafael Ibáñez endodoncia',
   ],
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,
@@ -55,7 +56,7 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Formación dental de excelencia`,
     description:
       'Cursos presenciales y online para dentistas e higienistas. Vera, Almería.',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: SITE_NAME }],
+    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: `${SITE_NAME} — Formación dental de excelencia en Vera, Almería` }],
   },
   twitter: {
     card: 'summary_large_image',
@@ -69,16 +70,31 @@ export const metadata: Metadata = {
 
 const organizationJsonLd = {
   '@context': 'https://schema.org',
-  '@type': 'EducationalOrganization',
+  '@type': ['EducationalOrganization', 'LocalBusiness'],
   name: SITE_NAME,
   url: SITE_URL,
+  logo: `${SITE_URL}/images/logo-icon.png`,
+  image: `${SITE_URL}/og-image.jpg`,
   telephone: `+34${CONTACT.phone}`,
   email: CONTACT.email,
+  priceRange: '€€',
+  description:
+    'Academia de formación dental especializada en Vera, Almería. Cursos presenciales impartidos por referentes del sector.',
   address: {
     '@type': 'PostalAddress',
     addressLocality: 'Vera',
     addressRegion: 'Almería',
     addressCountry: 'ES',
+  },
+  geo: {
+    '@type': 'GeoCoordinates',
+    latitude: 37.2497,
+    longitude: -1.8605,
+  },
+  areaServed: {
+    '@type': 'GeoCircle',
+    geoMidpoint: { '@type': 'GeoCoordinates', latitude: 37.2497, longitude: -1.8605 },
+    geoRadius: '150000',
   },
   sameAs: [SITE_URL],
 }

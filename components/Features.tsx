@@ -39,7 +39,7 @@ export default function Features() {
             const Icon = ICON_MAP[feature.icon] ?? Target
             return (
               <AnimateOnScroll key={feature.title} delay={index * 80}>
-                <div className="feature-card-bar group bg-white rounded-xl border border-gray-100 p-9 hover:-translate-y-[3px] hover:shadow-xl hover:border-transparent transition-all duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] h-full">
+                <article className="feature-card-bar group bg-white rounded-xl border border-gray-100 p-9 hover:-translate-y-[3px] hover:shadow-xl hover:border-transparent transition-all duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] h-full">
                   <div className="w-[54px] h-[54px] rounded-[14px] flex items-center justify-center mb-6 bg-teal-light group-hover:bg-teal/15 transition-colors duration-300">
                     <Icon className="w-[26px] h-[26px] text-teal stroke-[1.75]" />
                   </div>
@@ -49,7 +49,7 @@ export default function Features() {
                   <p className="text-[0.96rem] text-gray-500 leading-[1.7]">
                     {feature.description}
                   </p>
-                </div>
+                </article>
               </AnimateOnScroll>
             )
           })}
