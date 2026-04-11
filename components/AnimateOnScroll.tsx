@@ -21,21 +21,30 @@ export default function AnimateOnScroll({ children, className = '', delay = 0 }:
     const el = ref.current
     if (!el) return
 
+    const show = () => {
+      el.style.opacity = '1'
+      el.style.transform = 'translateY(0)'
+    }
+
+    // Safety fallback: always visible after 1s regardless of observer
+    const fallback = setTimeout(show, 1000 + delay)
+
     const observer = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
-          setTimeout(() => {
-            el.style.opacity = '1'
-            el.style.transform = 'translateY(0)'
-          }, delay)
+          clearTimeout(fallback)
+          setTimeout(show, delay)
           observer.unobserve(el)
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -40px 0px' },
+      { threshold: 0.05, rootMargin: '0px 0px -20px 0px' },
     )
 
     observer.observe(el)
-    return () => observer.disconnect()
+    return () => {
+      observer.disconnect()
+      clearTimeout(fallback)
+    }
   }, [delay])
 
   return (

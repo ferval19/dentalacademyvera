@@ -49,7 +49,7 @@ export default function Courses() {
 
         {/* ── Featured card ─────────────────────────────────── */}
         <AnimateOnScroll>
-          <article className="rounded-xl overflow-hidden border border-gray-200 shadow-xl grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
+          <div className="rounded-xl overflow-hidden border border-gray-200 shadow-xl grid grid-cols-1 lg:grid-cols-[3fr_2fr]">
 
             {/* Left: Image */}
             <div className="relative min-h-[320px] lg:min-h-[500px] bg-navy-deep overflow-hidden">
@@ -191,7 +191,7 @@ export default function Courses() {
                 </div>
               </div>
             </div>
-          </article>
+          </div>
         </AnimateOnScroll>
 
         {/* ── Program preview 4-col ───────────────────────────── */}
