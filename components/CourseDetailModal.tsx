@@ -122,7 +122,6 @@ export default function CourseDetailModal({ course, onClose }: Props) {
               <div className="font-display text-[2rem] font-bold text-navy leading-none">
                 {course.price} €
               </div>
-              <div className="text-[0.75rem] text-gray-400 mt-1">IVA no incluido</div>
             </div>
 
             {/* Professor */}

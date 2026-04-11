@@ -161,9 +161,6 @@ export default function Courses() {
               {/* Price + CTAs */}
               <div>
                 <div className="mb-5">
-                  <div className="font-label text-[0.72rem] text-white/40 tracking-[0.06em] uppercase mb-1">
-                    desde
-                  </div>
                   <div className="font-display text-[2.6rem] font-bold text-teal leading-none">
                     {course.price} €
                   </div>

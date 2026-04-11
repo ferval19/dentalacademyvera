@@ -202,7 +202,6 @@ export default async function CoursePage({ params }: Props) {
               <span className="font-display text-[1.6rem] font-bold text-navy">
                 {course.price} €
               </span>
-              <span className="font-label text-[0.78rem] text-gray-400">desde · IVA no incl.</span>
             </div>
             <div className="flex gap-3">
               <a
@@ -290,10 +289,9 @@ export default async function CoursePage({ params }: Props) {
               <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-1">
                 Inversión
               </div>
-              <div className="font-display text-[2.6rem] font-bold text-navy leading-none mb-1">
+              <div className="font-display text-[2.6rem] font-bold text-navy leading-none mb-6">
                 {course.price} €
               </div>
-              <div className="font-label text-[0.78rem] text-gray-400 mb-6">IVA no incluido</div>
 
               <div className="space-y-[10px]">
                 <a

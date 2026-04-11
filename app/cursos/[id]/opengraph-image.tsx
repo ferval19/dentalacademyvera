@@ -298,9 +298,6 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 alignItems: 'center',
               }}
             >
-              <span style={{ color: 'rgba(255,255,255,0.75)', fontSize: '12px', fontWeight: 600, letterSpacing: '0.06em', display: 'flex' }}>
-                desde
-              </span>
               <span style={{ color: 'white', fontSize: '28px', fontWeight: 800, lineHeight: 1.1, display: 'flex' }}>
                 {course.price} €
               </span>
