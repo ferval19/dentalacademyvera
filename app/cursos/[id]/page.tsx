@@ -13,7 +13,7 @@ import Nav from '@/components/Nav'
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://dentalacademyvera.com')
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.dentalacademyvera.com')
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -43,13 +43,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
       description,
       url: pageUrl,
       type: 'website',
-      images: [{ url: `${SITE_URL}/cursos/${id}/opengraph-image`, width: 1200, height: 630, alt: `${title} — Dental Academy Vera` }],
+      images: [{ url: `${SITE_URL}${course.ogImage ?? `/cursos/${id}/opengraph-image`}`, width: 1200, height: 630, alt: `${title} — Dental Academy Vera` }],
     },
     twitter: {
       card: 'summary_large_image',
       title,
       description,
-      images: [`${SITE_URL}/cursos/${id}/opengraph-image`],
+      images: [`${SITE_URL}${course.ogImage ?? `/cursos/${id}/opengraph-image`}`],
     },
   }
 }

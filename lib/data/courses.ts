@@ -19,6 +19,7 @@ export const courses: Course[] = [
     emoji: '🔬',
     gradient: 'linear-gradient(135deg, #1E2D3D, #3A5068)',
     imageUrl: '/images/courses/endodoncia-clinica.jpg',
+    ogImage: '/images/share-endodoncia-landscape.jpg',
     includesPractice: true,
     professorId: 'rafael-ibanez',
     program: [

@@ -31,6 +31,7 @@ export interface Course {
   emoji: string
   gradient: string
   imageUrl?: string
+  ogImage?: string
   includesPractice?: boolean
   locationUrl?: string
   includes?: string[]
