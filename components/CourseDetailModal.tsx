@@ -117,7 +117,7 @@ export default function CourseDetailModal({ course, onClose }: Props) {
             {/* Price */}
             <div className="bg-white rounded border border-gray-200 p-4">
               <div className="font-label text-[0.68rem] font-normal text-gray-400 tracking-[0.04em] uppercase mb-1">
-                Inversión
+                Precio
               </div>
               <div className="font-display text-[2rem] font-bold text-navy leading-none">
                 {course.price} €

@@ -21,7 +21,14 @@
       "Bash(git add:*)",
       "Bash(git commit:*)",
       "Bash(git push:*)",
-      "Bash(npx tsc:*)"
+      "Bash(npx tsc:*)",
+      "Bash(ls public/images/share-*)",
+      "Bash(ls public/images/*.py)",
+      "Bash(node -e \"const fs = require\\('fs'\\); const b64 = fs.readFileSync\\('/Users/ffvalero/Develpoer/proyectos/dentalacademyvera/public/images/endogal-white.png'\\).toString\\('base64'\\); process.stdout.write\\('data:image/png;base64,' + b64\\)\")",
+      "Read(//tmp/**)",
+      "Bash(git show:*)",
+      "WebFetch(domain:www.dentalacademyvera.com)",
+      "Bash(curl -s -o /tmp/endodoncia-og-new.png \"http://localhost:3099/cursos/endodoncia-clinica/opengraph-image\")"
     ]
   }
 }
