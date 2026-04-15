@@ -269,40 +269,22 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             }}
           />
 
-          {/* Meta + price row */}
-          <div style={{ display: 'flex', alignItems: 'flex-end', gap: '0', justifyContent: 'space-between', maxWidth: '720px' }}>
-            <div style={{ display: 'flex', gap: '36px' }}>
-              {[
-                { label: 'FECHA', value: course.date },
-                { label: 'DURACIÓN', value: course.duration },
-                { label: 'PLAZAS', value: `${course.spots} máx.` },
-              ].map(({ label, value }) => (
-                <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                  <span style={{ color: '#2BB5A0', fontSize: '12px', fontWeight: 700, letterSpacing: '0.1em', display: 'flex' }}>
-                    {label}
-                  </span>
-                  <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: '19px', fontWeight: 500, display: 'flex' }}>
-                    {value}
-                  </span>
-                </div>
-              ))}
-            </div>
-
-            {/* Price badge */}
-            <div
-              style={{
-                background: '#2BB5A0',
-                borderRadius: '12px',
-                padding: '10px 22px',
-                display: 'flex',
-                flexDirection: 'column',
-                alignItems: 'center',
-              }}
-            >
-              <span style={{ color: 'white', fontSize: '28px', fontWeight: 800, lineHeight: 1.1, display: 'flex' }}>
-                {course.price} €
-              </span>
-            </div>
+          {/* Meta row */}
+          <div style={{ display: 'flex', gap: '36px' }}>
+            {[
+              { label: 'FECHA', value: course.date },
+              { label: 'DURACIÓN', value: course.duration },
+              { label: 'PLAZAS', value: `${course.spots} máx.` },
+            ].map(({ label, value }) => (
+              <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
+                <span style={{ color: '#2BB5A0', fontSize: '12px', fontWeight: 700, letterSpacing: '0.1em', display: 'flex' }}>
+                  {label}
+                </span>
+                <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: '19px', fontWeight: 500, display: 'flex' }}>
+                  {value}
+                </span>
+              </div>
+            ))}
           </div>
 
           {/* URL watermark */}
