@@ -25,7 +25,7 @@ const outfit = Outfit({
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'http://localhost:3000')
+  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://dentalacademyvera.com')
 const SITE_NAME = 'Dental Academy Vera'
 
 export const metadata: Metadata = {
