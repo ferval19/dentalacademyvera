@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { courses } from '@/lib/data/courses'
+import { ENDOGAL_WHITE_B64 } from '@/lib/endogal-b64'
 
 export const runtime = 'edge'
 export const size = { width: 1200, height: 630 }
@@ -317,6 +318,49 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             }}
           >
             dentalacademyvera.com
+          </div>
+
+          {/* Collaborator logo */}
+          <div
+            style={{
+              position: 'absolute',
+              bottom: '22px',
+              right: '52px',
+              display: 'flex',
+              alignItems: 'center',
+              gap: '10px',
+            }}
+          >
+            <span
+              style={{
+                color: 'rgba(255,255,255,0.28)',
+                fontSize: '11px',
+                fontWeight: 600,
+                letterSpacing: '0.10em',
+                textTransform: 'uppercase',
+                display: 'flex',
+              }}
+            >
+              COLABORA
+            </span>
+            <div
+              style={{
+                background: 'white',
+                borderRadius: '6px',
+                padding: '5px 10px',
+                display: 'flex',
+                alignItems: 'center',
+              }}
+            >
+              {/* eslint-disable-next-line @next/next/no-img-element */}
+              <img
+                src={ENDOGAL_WHITE_B64}
+                alt="Endogal"
+                width={90}
+                height={60}
+                style={{ objectFit: 'contain', display: 'flex' }}
+              />
+            </div>
           </div>
         </div>
       </div>

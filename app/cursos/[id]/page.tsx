@@ -316,6 +316,27 @@ export default async function CoursePage({ params }: Props) {
                 <ProfessorCard professor={professor} />
               </section>
             )}
+
+            {/* Collaborator on mobile */}
+            <div className="mt-8 lg:hidden bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+              <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
+                Colabora
+              </div>
+              <a
+                href="https://www.endogal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+              >
+                <Image
+                  src="/images/endogal.png"
+                  alt="Endogal"
+                  width={120}
+                  height={80}
+                  className="object-contain"
+                />
+              </a>
+            </div>
           </div>
 
           {/* RIGHT: Sidebar (desktop) */}
@@ -393,6 +414,27 @@ export default async function CoursePage({ params }: Props) {
                   </ul>
                 </div>
               )}
+            </div>
+
+            {/* Collaborator */}
+            <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+              <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
+                Colabora
+              </div>
+              <a
+                href="https://www.endogal.com"
+                target="_blank"
+                rel="noopener noreferrer"
+                className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+              >
+                <Image
+                  src="/images/endogal.png"
+                  alt="Endogal"
+                  width={120}
+                  height={80}
+                  className="object-contain"
+                />
+              </a>
             </div>
 
             {/* Professor sidebar */}
