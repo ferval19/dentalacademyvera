@@ -57,11 +57,10 @@ export default function Nav() {
               {link.label}
             </Link>
           ))}
-          <Link
-            href={href('contacto')}
-            className="rounded-full bg-teal-deep hover:bg-teal-deep-hover text-white text-[14px] font-medium px-4 py-[7px] transition-colors"
-          >
-            Contactar
+          {/* Enlace de texto, no botón: la acción primaria vive en cada página
+              (p. ej. "Reservar" en la barra del curso), como en apple.com */}
+          <Link href={href('contacto')} className="text-[14px] text-ink/70 hover:text-ink transition-colors">
+            Contacto
           </Link>
         </div>
 
