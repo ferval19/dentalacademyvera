@@ -6,16 +6,48 @@ import {
   CalendarDays, Clock, MapPin, Users, MessageCircle, Phone,
   GraduationCap, ChevronRight, Check, Timer,
 } from 'lucide-react'
-import { courses, formatPrice, isPastCourse, getNextCourse } from '@/lib/data/courses'
-import type { Collaborator } from '@/types'
+import { courses, formatPrice, isPastCourse, getNextCourse, formatLongDate } from '@/lib/data/courses'
+import type { Collaborator, Course } from '@/types'
 import { professors } from '@/lib/data/professors'
 import { CONTACT, whatsappCourse } from '@/lib/contact'
 import Nav from '@/components/Nav'
 import Footer from '@/components/Footer'
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.dentalacademyvera.com')
+import { SITE_URL, SITE_NAME, pageMetadata } from '@/lib/site'
+
+/** Recorta en la última palabra completa antes de `max` caracteres. */
+function clip(text: string, max = 158) {
+  if (text.length <= max) return text
+  return text.slice(0, text.lastIndexOf(' ', max - 1)).replace(/[,;:.]$/, '') + '…'
+}
+
+function courseDescription(course: Course) {
+  const professor = professors.find((p) => p.id === course.professorId)
+  const cat = course.categoryLabel.toLowerCase()
+  const when = isPastCourse(course)
+    ? `Edición celebrada del curso de ${cat} el ${formatLongDate(course)}`
+    : `Curso presencial de ${cat} el ${formatLongDate(course)}`
+  const who = professor ? ` con el ${professor.name}` : ''
+  const lead = `${when} en Vera (Almería)${who}.`
+  // Añade la frase extra más informativa que quepa entera; nunca a medias
+  const candidates = [
+    course.summary?.split(/(?<=[.?!])\s/)[0],
+    course.subtitle && `${course.subtitle}.`,
+  ].filter(Boolean) as string[]
+  const extra = candidates.find((c) => lead.length + 1 + c.length <= 158)
+  return clip(extra ? `${lead} ${extra}` : lead)
+}
+
+function isoWorkload(duration: string) {
+  const h = parseFloat(duration.replace(',', '.'))
+  if (!Number.isFinite(h)) return undefined
+  const mins = Math.round((h % 1) * 60)
+  return `PT${Math.floor(h)}H${mins ? `${mins}M` : ''}`
+}
+
+function courseOgImage(course: Course) {
+  return course.ogImage ?? `/cursos/${course.id}/opengraph-image`
+}
 
 type Props = { params: Promise<{ id: string }> }
 
@@ -30,32 +62,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = courses.find((c) => c.id === id)
   if (!course) return {}
 
-  const professor = professors.find((p) => p.id === course.professorId)
-  const title = course.title
-  const description =
-    `Curso de ${course.categoryLabel} en ${course.location} (Vera, Almería). ${course.date}.` +
-    (professor ? ` Impartido por ${professor.name}.` : '') +
-    (course.summary ? ` ${course.summary.split('. ')[0]}.` : course.subtitle ? ` ${course.subtitle}.` : '')
-  const pageUrl = `${SITE_URL}/cursos/${id}`
-
-  return {
-    title,
-    description,
-    alternates: { canonical: pageUrl },
-    openGraph: {
-      title,
-      description,
-      url: pageUrl,
-      type: 'website',
-      images: [{ url: `${SITE_URL}${course.ogImage ?? `/cursos/${id}/opengraph-image`}`, width: 1200, height: 630, alt: `${title} — Dental Academy Vera` }],
-    },
-    twitter: {
-      card: 'summary_large_image',
-      title,
-      description,
-      images: [`${SITE_URL}${course.ogImage ?? `/cursos/${id}/opengraph-image`}`],
-    },
-  }
+  return pageMetadata({
+    title: course.title,
+    socialTitle: course.subtitle ? `${course.title}: ${course.subtitle.toLowerCase()}` : course.title,
+    description: courseDescription(course),
+    path: `/cursos/${id}`,
+    image: { url: courseOgImage(course), width: 1200, height: 630, alt: `${course.title} — ${SITE_NAME}` },
+  })
 }
 
 // ── Page ──────────────────────────────────────────────────────────────────────
@@ -82,11 +95,13 @@ export default async function CoursePage({ params }: Props) {
       course.subtitle ??
       `Curso de ${course.categoryLabel} en ${course.location}. ${course.date}. Formación presencial impartida por referentes del sector.`,
     url: courseUrl,
+    image: `${SITE_URL}${courseOgImage(course)}`,
+    inLanguage: 'es',
     educationalLevel: 'Professional',
     teaches: course.program?.flatMap((m) => m.topics) ?? course.objectives ?? [],
     provider: {
       '@type': 'EducationalOrganization',
-      name: 'Dental Academy Vera',
+      name: SITE_NAME,
       url: SITE_URL,
     },
     ...(course.price != null && !past && {
@@ -106,6 +121,9 @@ export default async function CoursePage({ params }: Props) {
       '@type': 'CourseInstance',
       courseMode: course.modality === 'online' ? 'online' : 'onsite',
       startDate: course.dateISO,
+      endDate: course.dateISO,
+      // Google exige courseWorkload (o courseSchedule) en CourseInstance: "8,5 horas" → PT8H30M
+      ...(isoWorkload(course.duration) && { courseWorkload: isoWorkload(course.duration) }),
       location: {
         '@type': 'Place',
         name: course.location,

@@ -1,5 +1,6 @@
 import { ImageResponse } from 'next/og'
 import { courses, splitTitle } from '@/lib/data/courses'
+import { professors } from '@/lib/data/professors'
 
 export const runtime = 'edge'
 export const size = { width: 1200, height: 630 }
@@ -10,6 +11,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const course = courses.find((c) => c.id === id)
   if (!course) return new Response('Not found', { status: 404 })
   const [titleA, titleB] = splitTitle(course.title)
+  const professor = professors.find((p) => p.id === course.professorId)
   const logos = (course.collaborators ?? []).filter((c) => c.ogLogoB64)
 
   return new ImageResponse(
@@ -219,7 +221,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                   display: 'flex',
                 }}
               >
-                INCLUYE PRACTICA
+                INCLUYE PRÁCTICA
               </div>
             )}
           </div>
@@ -257,23 +259,21 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             </div>
           )}
 
-          {/* Divider */}
+          {/* Meta row (la línea superior hace de divisor) */}
           <div
             style={{
-              width: '400px',
-              height: '1px',
-              background: 'rgba(255,255,255,0.12)',
-              marginBottom: '28px',
               display: 'flex',
+              gap: '36px',
+              paddingTop: '24px',
+              borderTop: '1px solid rgba(255,255,255,0.14)',
+              maxWidth: '760px',
             }}
-          />
-
-          {/* Meta row */}
-          <div style={{ display: 'flex', gap: '36px' }}>
+          >
             {[
               { label: 'FECHA', value: course.date },
               { label: 'DURACIÓN', value: course.duration },
               { label: 'PLAZAS', value: `${course.spots} máx.` },
+              ...(professor ? [{ label: 'PONENTE', value: professor.name }] : []),
             ].map(({ label, value }) => (
               <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
                 <span style={{ color: '#2BB5A0', fontSize: '12px', fontWeight: 700, letterSpacing: '0.1em', display: 'flex' }}>

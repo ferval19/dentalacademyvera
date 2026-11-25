@@ -9,22 +9,16 @@ import Footer from '@/components/Footer'
 import AnimateOnScroll from '@/components/AnimateOnScroll'
 import { professors } from '@/lib/data/professors'
 import { getCoursesByProfessor, isPastCourse, formatShortDate } from '@/lib/data/courses'
-import { SITE_URL, SITE_NAME } from '@/lib/site'
+import { SITE_URL, pageMetadata } from '@/lib/site'
 
 const DESCRIPTION =
-  'Profesorado de Dental Academy Vera: ponentes en endodoncia, ortodoncia con alineadores y otras áreas, con su formación, trayectoria y los cursos que han impartido en Vera.'
+  'Ponentes de Dental Academy Vera en endodoncia y ortodoncia con alineadores: formación, trayectoria y cursos que han impartido en Vera (Almería).'
 
-export const metadata: Metadata = {
+export const metadata: Metadata = pageMetadata({
   title: 'Profesorado',
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/profesores` },
-  openGraph: {
-    title: `Profesorado — ${SITE_NAME}`,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/profesores`,
-    type: 'website',
-  },
-}
+  path: '/profesores',
+})
 
 export default function ProfessorsPage() {
   // Primero quien tiene un curso próximo; después, por su curso más reciente

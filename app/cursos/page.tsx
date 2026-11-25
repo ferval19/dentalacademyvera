@@ -15,23 +15,18 @@ import {
   formatPrice,
 } from '@/lib/data/courses'
 import { whatsappCourse, CONTACT } from '@/lib/contact'
-import { SITE_URL, SITE_NAME } from '@/lib/site'
+import { SITE_URL, SITE_NAME, pageMetadata } from '@/lib/site'
 import type { Course } from '@/types'
 
 const DESCRIPTION =
-  'Próximos cursos y archivo de ediciones celebradas en Dental Academy Vera (Almería): endodoncia, ortodoncia con alineadores y más, impartidos por referentes de cada especialidad.'
+  'Próximos cursos para dentistas en Vera (Almería) y archivo de ediciones celebradas: endodoncia, ortodoncia con alineadores y más, en grupos reducidos.'
 
-export const metadata: Metadata = {
-  title: 'Cursos',
+export const metadata: Metadata = pageMetadata({
+  title: 'Cursos de odontología en Vera (Almería)',
+  socialTitle: `Cursos — ${SITE_NAME}`,
   description: DESCRIPTION,
-  alternates: { canonical: `${SITE_URL}/cursos` },
-  openGraph: {
-    title: `Cursos — ${SITE_NAME}`,
-    description: DESCRIPTION,
-    url: `${SITE_URL}/cursos`,
-    type: 'website',
-  },
-}
+  path: '/cursos',
+})
 
 const MONTH = (c: Course) =>
   c.dateISO

@@ -23,10 +23,7 @@ const outfit = Outfit({
   display: 'swap',
 })
 
-const SITE_URL =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://www.dentalacademyvera.com')
-const SITE_NAME = 'Dental Academy Vera'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/site'
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -42,7 +39,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    'Formación dental de excelencia en Vera, Almería. Cursos presenciales y online impartidos por profesionales referentes del sector. Endodoncia, ortodoncia con alineadores, estética y más.',
+    'Cursos presenciales para dentistas en Vera (Almería): endodoncia, ortodoncia con alineadores y más, en grupos reducidos y con ponentes de referencia.',
   keywords: [
     'formación dental Vera Almería',
     'cursos odontología',
@@ -66,13 +63,13 @@ export const metadata: Metadata = {
     siteName: SITE_NAME,
     title: `${SITE_NAME} — Formación dental de excelencia`,
     description:
-      'Cursos presenciales y online para dentistas e higienistas. Vera, Almería.',
-    images: [{ url: '/og-image.jpg', width: 1200, height: 630, alt: `${SITE_NAME} — Formación dental de excelencia en Vera, Almería` }],
+      'Cursos presenciales para dentistas en Vera (Almería), en grupos reducidos y con ponentes de referencia.',
+    images: [{ ...DEFAULT_OG_IMAGE, type: 'image/jpeg' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${SITE_NAME} — Formación dental de excelencia`,
-    description: 'Cursos presenciales y online para dentistas e higienistas. Vera, Almería.',
+    description: 'Cursos presenciales para dentistas en Vera (Almería), en grupos reducidos y con ponentes de referencia.',
     images: ['/og-image.jpg'],
   },
   alternates: { canonical: SITE_URL },
@@ -107,7 +104,6 @@ const organizationJsonLd = {
     geoMidpoint: { '@type': 'GeoCoordinates', latitude: 37.2497, longitude: -1.8605 },
     geoRadius: '150000',
   },
-  sameAs: [SITE_URL],
 }
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
