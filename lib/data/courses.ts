@@ -1,5 +1,6 @@
 import type { Course, CourseFilter } from '@/types'
 import { ENDOGAL_WHITE_B64 } from '@/lib/endogal-b64'
+import { ORMCO_B64, SPARK_B64 } from '@/lib/sponsor-logos-b64'
 
 export const courses: Course[] = [
   {
@@ -23,12 +24,14 @@ export const courses: Course[] = [
     ogImage: '/images/courses/endodoncia-og.jpg',
     includesPractice: true,
     quote: 'Ponte al día en diagnóstico, instrumentación, irrigación y obturación en una sola jornada.',
-    collaborator: {
-      name: 'Endogal',
-      url: 'https://www.endogal.com',
-      logoUrl: '/images/endogal.png',
-      ogLogoB64: ENDOGAL_WHITE_B64,
-    },
+    collaborators: [
+      {
+        name: 'Endogal',
+        url: 'https://www.endogal.com',
+        logoUrl: '/images/patrocinadores/endogal.png',
+        ogLogoB64: ENDOGAL_WHITE_B64,
+      },
+    ],
     professorId: 'rafael-ibanez',
     program: [
       {
@@ -101,6 +104,20 @@ export const courses: Course[] = [
       'Resolver complicaciones cuando no llegas a tiempo',
     ],
     quote: '¿Lo trato ahora o espero? Claves para decidir y tratar en el momento adecuado.',
+    collaborators: [
+      {
+        name: 'Ormco',
+        url: 'https://ormco.com',
+        logoUrl: '/images/patrocinadores/ormco.png',
+        ogLogoB64: ORMCO_B64,
+      },
+      {
+        name: 'Spark Clear Aligner System',
+        url: 'https://sparkaligners.com',
+        logoUrl: '/images/patrocinadores/spark.png',
+        ogLogoB64: SPARK_B64,
+      },
+    ],
     professorId: 'juan-manuel-bailon',
   },
 ]
@@ -158,4 +175,26 @@ export function formatShortDate(course: Course): string {
 export function splitTitle(title: string): [string, string] {
   const i = title.indexOf(' en ')
   return i === -1 ? [title, ''] : [title.slice(0, i + 3), title.slice(i + 4)]
+}
+
+/** Todos los cursos en orden cronológico (la primera edición primero). */
+export function getCoursesChronological(): Course[] {
+  return [...courses].sort((a, b) => (a.dateISO ?? '').localeCompare(b.dateISO ?? ''))
+}
+
+/** Cursos ya celebrados, del más reciente al más antiguo. */
+export function getPastCourses(): Course[] {
+  return getCoursesChronological().filter(isPastCourse).reverse()
+}
+
+/** Número de edición de la academia (1 = primer curso celebrado). */
+export function editionNumber(course: Course): number {
+  return getCoursesChronological().findIndex((c) => c.id === course.id) + 1
+}
+
+/** Cursos de un ponente, del más reciente al más antiguo. */
+export function getCoursesByProfessor(professorId: string): Course[] {
+  return getCoursesChronological()
+    .filter((c) => c.professorId === professorId)
+    .reverse()
 }

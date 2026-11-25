@@ -10,7 +10,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const course = courses.find((c) => c.id === id)
   if (!course) return new Response('Not found', { status: 404 })
   const [titleA, titleB] = splitTitle(course.title)
-  const collaborator = course.collaborator
+  const logos = (course.collaborators ?? []).filter((c) => c.ogLogoB64)
 
   return new ImageResponse(
     (
@@ -302,7 +302,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           </div>
 
           {/* Collaborator logo */}
-          {collaborator?.ogLogoB64 && (
+          {logos.length > 0 && (
           <div
             style={{
               position: 'absolute',
@@ -323,25 +323,29 @@ export default async function Image({ params }: { params: Promise<{ id: string }
                 display: 'flex',
               }}
             >
-              COLABORA
+              {logos.length > 1 ? 'COLABORAN' : 'COLABORA'}
             </span>
             <div
               style={{
                 background: 'white',
                 borderRadius: '6px',
-                padding: '5px 10px',
+                padding: '6px 12px',
                 display: 'flex',
                 alignItems: 'center',
+                gap: '18px',
               }}
             >
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={collaborator.ogLogoB64}
-                alt={collaborator.name}
-                width={90}
-                height={60}
-                style={{ objectFit: 'contain', display: 'flex' }}
-              />
+              {logos.map((logo) => (
+                // eslint-disable-next-line @next/next/no-img-element
+                <img
+                  key={logo.name}
+                  src={logo.ogLogoB64}
+                  alt={logo.name}
+                  width={logos.length > 1 ? 110 : 90}
+                  height={logos.length > 1 ? 40 : 60}
+                  style={{ objectFit: 'contain', display: 'flex' }}
+                />
+              ))}
             </div>
           </div>
           )}

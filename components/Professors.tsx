@@ -1,12 +1,29 @@
 import Image from 'next/image'
+import Link from 'next/link'
 import AnimateOnScroll from './AnimateOnScroll'
 import { professors } from '@/lib/data/professors'
-import { getNextCourse } from '@/lib/data/courses'
+import { getNextCourse, getPastCourses, formatShortDate } from '@/lib/data/courses'
+import type { Course, Professor } from '@/types'
 
 export default function Professors() {
-  const course = getNextCourse()
-  const professor = professors.find((p) => p.id === course?.professorId)
+  const nextCourse = getNextCourse()
+  const pastCourses = getPastCourses()
+  // Destacado: ponente de la próxima edición (o, si no hay, el de la última celebrada)
+  const featuredCourse = nextCourse ?? pastCourses[0]
+  const professor = professors.find((p) => p.id === featuredCourse?.professorId)
   if (!professor) return null
+
+  // Histórico: ponentes de ediciones celebradas, sin repetir al destacado
+  const alumniMap = new Map<string, { professor: Professor; courses: Course[] }>()
+  for (const c of pastCourses) {
+    if (!c.professorId || c.professorId === professor.id) continue
+    const p = professors.find((x) => x.id === c.professorId)
+    if (!p) continue
+    const entry = alumniMap.get(p.id) ?? { professor: p, courses: [] }
+    entry.courses.push(c)
+    alumniMap.set(p.id, entry)
+  }
+  const alumni = [...alumniMap.values()]
 
   return (
     <section className="py-[110px] bg-off-white" id="profesores">
@@ -16,11 +33,16 @@ export default function Professors() {
         <AnimateOnScroll className="mb-14">
           <div className="inline-flex items-center gap-2 font-label text-[0.8rem] font-semibold tracking-[0.14em] uppercase text-teal mb-5">
             <span className="w-6 h-[2px] bg-teal flex-shrink-0" />
-            Ponente
+            Profesorado
           </div>
           <h2 className="font-display text-[clamp(2.1rem,3.5vw,3rem)] font-bold text-navy leading-[1.15]">
-            Conoce a tu formador
+            {nextCourse ? 'Conoce a tu formador' : 'Nuestro último ponente'}
           </h2>
+          {nextCourse && (
+            <p className="text-[1.05rem] text-gray-500 mt-3">
+              Imparte <span className="text-navy font-medium">{nextCourse.title}</span> el {formatShortDate(nextCourse).toLowerCase()} {nextCourse.dateISO?.slice(0, 4)}.
+            </p>
+          )}
         </AnimateOnScroll>
 
         {/* ── Magazine layout ───────────────────────────────── */}
@@ -114,6 +136,69 @@ export default function Professors() {
             </div>
           </AnimateOnScroll>
         </div>
+
+        {/* ── Han formado con nosotros ──────────────────────── */}
+        {alumni.length > 0 && (
+          <AnimateOnScroll className="mt-20">
+            <div className="flex items-center gap-4 mb-8">
+              <h3 className="font-label text-[0.8rem] font-semibold tracking-[0.14em] uppercase text-gray-500 flex-shrink-0">
+                Han formado con nosotros
+              </h3>
+              <span className="h-px flex-1 bg-gray-200" />
+              <Link href="/profesores" className="font-label text-[0.82rem] font-semibold text-teal hover:text-teal-dark flex-shrink-0">
+                Todo el profesorado →
+              </Link>
+            </div>
+
+            <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+              {alumni.map(({ professor: p, courses: taught }) => (
+                <li
+                  key={p.id}
+                  className="group bg-white border border-gray-200 rounded-xl overflow-hidden flex hover:shadow-lg hover:border-transparent transition-all duration-300"
+                >
+                  <div className="relative w-[112px] flex-shrink-0 bg-[#f0eeea]">
+                    {p.imageUrl ? (
+                      <Image
+                        src={p.imageUrl}
+                        alt={p.name}
+                        fill
+                        sizes="112px"
+                        className="object-cover object-top grayscale group-hover:grayscale-0 transition-[filter] duration-500"
+                      />
+                    ) : (
+                      <span className="absolute inset-0 flex items-center justify-center font-label text-[1.4rem] font-bold text-teal">
+                        {p.initials}
+                      </span>
+                    )}
+                  </div>
+                  <div className="p-5 min-w-0">
+                    <div className="font-display text-[1.08rem] font-semibold text-navy leading-tight mb-1">
+                      {p.name}
+                    </div>
+                    <div className="font-label text-[0.7rem] text-teal uppercase tracking-[0.06em] font-semibold mb-3">
+                      {p.tagline ?? p.specialty}
+                    </div>
+                    <ul className="space-y-[6px]">
+                      {taught.map((c) => (
+                        <li key={c.id} className="text-[0.85rem] leading-[1.45]">
+                          <Link
+                            href={`/cursos/${c.id}`}
+                            className="text-gray-600 hover:text-teal transition-colors"
+                          >
+                            {c.title}
+                          </Link>
+                          <span className="block font-label text-[0.72rem] uppercase tracking-[0.08em] text-gray-400 mt-[2px]">
+                            {formatShortDate(c)} {c.dateISO?.slice(0, 4)}
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </AnimateOnScroll>
+        )}
       </div>
     </section>
   )

@@ -78,7 +78,8 @@
     background: #2bb5a0;
     transition: width 0.3s cubic-bezier(0.22, 1, 0.36, 1);
   }
-  .nav-link:hover::after {
+  .nav-link:hover::after,
+  .nav-link[aria-current='page']::after {
     width: 100%;
   }
 }

@@ -3,9 +3,9 @@ import { Phone, MessageCircle } from 'lucide-react'
 import { CONTACT } from '@/lib/contact'
 
 const FOOTER_LINKS = [
-  { label: 'Sobre nosotros', href: '#nosotros' },
-  { label: 'Profesores', href: '#profesores' },
-  { label: 'Cursos', href: '#cursos' },
+  { label: 'Cursos', href: '/cursos' },
+  { label: 'Profesorado', href: '/profesores' },
+  { label: 'Sobre nosotros', href: '/#nosotros' },
   { label: 'Contacto', href: '#contacto' },
 ]
 

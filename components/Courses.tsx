@@ -34,7 +34,8 @@ export default function Courses() {
       <div className="max-w-[1200px] mx-auto px-6">
 
         {/* Section header */}
-        <AnimateOnScroll className="mb-14">
+        <AnimateOnScroll className="mb-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
+          <div>
           <div className="inline-flex items-center gap-2 font-label text-[0.8rem] font-semibold tracking-[0.14em] uppercase text-teal mb-5">
             <span className="w-6 h-[2px] bg-teal flex-shrink-0" />
             Catálogo formativo
@@ -46,6 +47,13 @@ export default function Courses() {
             {course.subtitle ? `${course.subtitle}. ` : ''}Una jornada intensiva de {course.categoryLabel.toLowerCase()}
             {professor ? ` con el ${professor.name}` : ''}.
           </p>
+          </div>
+          <Link
+            href="/cursos"
+            className="font-label text-[0.88rem] font-semibold text-teal hover:text-teal-dark transition-colors flex-shrink-0"
+          >
+            Todos los cursos y ediciones anteriores →
+          </Link>
         </AnimateOnScroll>
 
         {/* ── Featured card ─────────────────────────────────── */}

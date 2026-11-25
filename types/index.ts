@@ -47,7 +47,7 @@ export interface Course {
   summary?: string          // párrafo descriptivo del curso
   objectives?: string[]     // objetivos de aprendizaje
   quote?: string            // frase destacada en el hero de la portada
-  collaborator?: Collaborator
+  collaborators?: Collaborator[]
   professorId?: string
 }
 

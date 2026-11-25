@@ -11,6 +11,7 @@ import type { Collaborator } from '@/types'
 import { professors } from '@/lib/data/professors'
 import { CONTACT, whatsappCourse } from '@/lib/contact'
 import Nav from '@/components/Nav'
+import Footer from '@/components/Footer'
 
 const SITE_URL =
   process.env.NEXT_PUBLIC_SITE_URL ??
@@ -127,7 +128,7 @@ export default async function CoursePage({ params }: Props) {
     '@type': 'BreadcrumbList',
     itemListElement: [
       { '@type': 'ListItem', position: 1, name: 'Inicio', item: SITE_URL },
-      { '@type': 'ListItem', position: 2, name: 'Cursos', item: `${SITE_URL}/#cursos` },
+      { '@type': 'ListItem', position: 2, name: 'Cursos', item: `${SITE_URL}/cursos` },
       { '@type': 'ListItem', position: 3, name: course.title, item: courseUrl },
     ],
   }
@@ -190,7 +191,7 @@ export default async function CoursePage({ params }: Props) {
                 </li>
                 <li aria-hidden><ChevronRight className="w-3 h-3" /></li>
                 <li>
-                  <Link href="/#cursos" className="hover:text-white transition-colors">Cursos</Link>
+                  <Link href="/cursos" className="hover:text-white transition-colors">Cursos</Link>
                 </li>
                 <li aria-hidden><ChevronRight className="w-3 h-3" /></li>
                 <li className="text-white/80 truncate max-w-[200px]">{course.title}</li>
@@ -393,9 +394,9 @@ export default async function CoursePage({ params }: Props) {
             )}
 
             {/* Collaborator on mobile */}
-            {course.collaborator && (
+            {course.collaborators && course.collaborators.length > 0 && (
               <div className="mt-8 lg:hidden">
-                <CollaboratorCard collaborator={course.collaborator} />
+                <CollaboratorCard collaborators={course.collaborators} />
               </div>
             )}
           </div>
@@ -480,7 +481,9 @@ export default async function CoursePage({ params }: Props) {
             </div>
 
             {/* Collaborator */}
-            {course.collaborator && <CollaboratorCard collaborator={course.collaborator} />}
+            {course.collaborators && course.collaborators.length > 0 && (
+              <CollaboratorCard collaborators={course.collaborators} />
+            )}
 
             {/* Professor sidebar */}
             {professor && <ProfessorCard professor={professor} />}
@@ -520,31 +523,37 @@ export default async function CoursePage({ params }: Props) {
           </div>
         </div>
       </section>
+      <Footer />
     </>
   )
 }
 
 // ── Collaborator card sub-component ──────────────────────────────────────────
-function CollaboratorCard({ collaborator }: { collaborator: Collaborator }) {
+function CollaboratorCard({ collaborators }: { collaborators: Collaborator[] }) {
   return (
     <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
       <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
-        Colabora
+        {collaborators.length > 1 ? 'Colaboran' : 'Colabora'}
       </div>
-      <a
-        href={collaborator.url}
-        target="_blank"
-        rel="noopener noreferrer"
-        className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
-      >
-        <Image
-          src={collaborator.logoUrl}
-          alt={collaborator.name}
-          width={120}
-          height={80}
-          className="object-contain"
-        />
-      </a>
+      <div className={`grid gap-3 ${collaborators.length > 1 ? 'grid-cols-2' : 'grid-cols-1'}`}>
+        {collaborators.map((collaborator) => (
+          <a
+            key={collaborator.name}
+            href={collaborator.url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="flex items-center justify-center h-[76px] px-4 rounded-lg bg-white border border-gray-100 hover:border-gray-300 transition-colors"
+          >
+            <Image
+              src={collaborator.logoUrl}
+              alt={collaborator.name}
+              width={140}
+              height={56}
+              className="object-contain max-h-[44px] w-auto"
+            />
+          </a>
+        ))}
+      </div>
     </div>
   )
 }
@@ -583,7 +592,7 @@ function ProfessorCard({
           <p className="text-[0.88rem] text-gray-500 leading-[1.6] mb-5">{professor.bio}</p>
         )}
 
-        {professor.credentialGroups?.map((group) => (
+        {professor.credentialGroups?.slice(0, 1).map((group) => (
           <div key={group.label} className="mb-4">
             <div className="font-label text-[0.7rem] font-semibold tracking-[0.08em] uppercase text-gray-400 mb-2">
               {group.label}
@@ -598,6 +607,13 @@ function ProfessorCard({
             </ul>
           </div>
         ))}
+
+        <Link
+          href={`/profesores#${professor.id}`}
+          className="inline-flex items-center gap-1 font-label text-[0.82rem] font-semibold text-teal hover:text-teal-dark transition-colors mt-1"
+        >
+          Ver perfil completo →
+        </Link>
       </div>
     </div>
   )

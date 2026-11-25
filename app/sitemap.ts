@@ -1,16 +1,13 @@
 import type { MetadataRoute } from 'next'
-import { courses } from '@/lib/data/courses'
-
-const BASE =
-  process.env.NEXT_PUBLIC_SITE_URL ??
-  (process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://dentalacademyvera.com')
+import { courses, isPastCourse } from '@/lib/data/courses'
+import { SITE_URL as BASE } from '@/lib/site'
 
 export default function sitemap(): MetadataRoute.Sitemap {
   const courseUrls: MetadataRoute.Sitemap = courses.map((course) => ({
     url: `${BASE}/cursos/${course.id}`,
     lastModified: new Date(),
-    changeFrequency: 'weekly',
-    priority: 0.9,
+    changeFrequency: isPastCourse(course) ? 'yearly' : 'weekly',
+    priority: isPastCourse(course) ? 0.5 : 0.9,
   }))
 
   return [
@@ -20,6 +17,8 @@ export default function sitemap(): MetadataRoute.Sitemap {
       changeFrequency: 'monthly',
       priority: 1.0,
     },
+    { url: `${BASE}/cursos`, lastModified: new Date(), changeFrequency: 'weekly', priority: 0.9 },
+    { url: `${BASE}/profesores`, lastModified: new Date(), changeFrequency: 'monthly', priority: 0.7 },
     ...courseUrls,
   ]
 }

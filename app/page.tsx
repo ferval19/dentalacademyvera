@@ -3,6 +3,7 @@ import Hero from '@/components/Hero'
 import Features from '@/components/Features'
 import Courses from '@/components/Courses'
 import Professors from '@/components/Professors'
+import Trajectory from '@/components/Trajectory'
 import About from '@/components/About'
 import CTA from '@/components/CTA'
 import Footer from '@/components/Footer'
@@ -16,6 +17,7 @@ export default function Home() {
         <Features />
         <Courses />
         <Professors />
+        <Trajectory />
         <About />
         <CTA />
       </main>

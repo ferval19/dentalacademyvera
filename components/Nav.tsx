@@ -5,10 +5,11 @@ import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 
-const NAV_ANCHORS = [
-  { anchor: 'cursos', label: 'Cursos' },
-  { anchor: 'profesores', label: 'Profesores' },
-  { anchor: 'nosotros', label: 'Sobre nosotros' },
+// `page` → página propia; `anchor` → sección de la portada
+const NAV_LINKS: { label: string; page?: string; anchor?: string }[] = [
+  { label: 'Cursos', page: '/cursos' },
+  { label: 'Profesorado', page: '/profesores' },
+  { label: 'Sobre nosotros', anchor: 'nosotros' },
 ]
 
 export default function Nav() {
@@ -20,6 +21,10 @@ export default function Nav() {
   // On any other page prefix with / so Next.js navigates home first.
   const href = (anchor: string) =>
     pathname === '/' ? `#${anchor}` : `/#${anchor}`
+  const linkHref = (link: (typeof NAV_LINKS)[number]) => link.page ?? href(link.anchor!)
+  // /cursos/[id] cuenta como sección "Cursos"
+  const isActive = (link: (typeof NAV_LINKS)[number]) =>
+    !!link.page && (pathname === link.page || pathname.startsWith(`${link.page}/`))
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -54,11 +59,14 @@ export default function Nav() {
 
         {/* Desktop links */}
         <div className="hidden md:flex items-center gap-8">
-          {NAV_ANCHORS.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
-              key={link.anchor}
-              href={href(link.anchor)}
-              className="nav-link font-body text-[0.95rem] font-medium text-gray-500 hover:text-navy transition-colors duration-300"
+              key={link.label}
+              href={linkHref(link)}
+              aria-current={isActive(link) ? 'page' : undefined}
+              className={`nav-link font-body text-[0.95rem] font-medium hover:text-navy transition-colors duration-300 ${
+                isActive(link) ? 'text-navy' : 'text-gray-500'
+              }`}
             >
               {link.label}
             </Link>
@@ -99,11 +107,14 @@ export default function Nav() {
       {/* Mobile drawer */}
       {menuOpen && (
         <div className="md:hidden flex flex-col bg-white px-6 py-6 shadow-lg gap-4">
-          {NAV_ANCHORS.map((link) => (
+          {NAV_LINKS.map((link) => (
             <Link
-              key={link.anchor}
-              href={href(link.anchor)}
-              className="font-body text-[0.9rem] font-medium text-gray-500 hover:text-navy transition-colors"
+              key={link.label}
+              href={linkHref(link)}
+              aria-current={isActive(link) ? 'page' : undefined}
+              className={`font-body text-[0.9rem] font-medium hover:text-navy transition-colors ${
+                isActive(link) ? 'text-navy' : 'text-gray-500'
+              }`}
               onClick={closeMenu}
             >
               {link.label}
