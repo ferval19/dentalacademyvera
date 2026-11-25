@@ -405,29 +405,39 @@ export default async function CoursePage({ params }: Props) {
         {(course.objectives || course.program) && (
           <section id="programa" className="scroll-mt-[140px] bg-white px-6 py-24 md:py-32">
             <div className="max-w-[1080px] mx-auto">
-              <AnimateOnScroll>
-                <h2 className="text-balance text-[clamp(2.2rem,5vw,3.75rem)] font-semibold tracking-[-0.03em] leading-[1.06] mb-14 max-w-[16ch]">
-                  {course.program ? 'El programa, paso a paso.' : 'Lo que vas a aprender.'}
-                </h2>
-              </AnimateOnScroll>
-
-              {course.objectives && (
-                <ul className="grid grid-cols-1 md:grid-cols-6 gap-4">
-                  {course.objectives.map((objective, i) => (
-                    <li key={objective} className={`${tileSpan(course.objectives!.length, i)}`}>
-                      <AnimateOnScroll delay={i * 60} className="h-full">
-                        <div className="h-full rounded-[28px] bg-surface p-8 md:p-10 flex flex-col gap-6 min-h-[200px]">
-                          <span className="w-9 h-9 rounded-full bg-white flex items-center justify-center">
-                            <Check aria-hidden className="w-[18px] h-[18px] text-teal-deep stroke-[2.5]" />
+              {/* Objetivos: titular a la izquierda y lista con filetes (mismo patrón que
+                  "Sobre el curso" y las preguntas frecuentes) */}
+              {course.objectives && !course.program && (
+                <div className="grid grid-cols-1 md:grid-cols-[minmax(0,4fr)_minmax(0,7fr)] gap-10 md:gap-16">
+                  <AnimateOnScroll>
+                    <p className="text-[17px] font-semibold text-teal-deep mb-3">Objetivos</p>
+                    <h2 className="text-balance text-[clamp(2.2rem,5vw,3.75rem)] font-semibold tracking-[-0.03em] leading-[1.06]">
+                      Lo que vas a aprender.
+                    </h2>
+                  </AnimateOnScroll>
+                  <AnimateOnScroll delay={100}>
+                    <ul className="border-t border-black/[0.12]">
+                      {course.objectives.map((objective) => (
+                        <li key={objective} className="flex items-start gap-4 py-6 border-b border-black/[0.12]">
+                          <span className="mt-[3px] w-7 h-7 rounded-full bg-teal-deep/10 flex items-center justify-center flex-shrink-0">
+                            <Check aria-hidden className="w-4 h-4 text-teal-deep stroke-[2.5]" />
                           </span>
-                          <p className="mt-auto text-[clamp(1.25rem,2vw,1.6rem)] font-semibold leading-[1.22] tracking-[-0.015em]">
+                          <span className="text-[clamp(1.15rem,1.7vw,1.375rem)] font-semibold leading-[1.3] tracking-[-0.015em] text-ink">
                             {objective}
-                          </p>
-                        </div>
-                      </AnimateOnScroll>
-                    </li>
-                  ))}
-                </ul>
+                          </span>
+                        </li>
+                      ))}
+                    </ul>
+                  </AnimateOnScroll>
+                </div>
+              )}
+
+              {course.program && (
+                <AnimateOnScroll>
+                  <h2 className="text-balance text-[clamp(2.2rem,5vw,3.75rem)] font-semibold tracking-[-0.03em] leading-[1.06] mb-14 max-w-[16ch]">
+                    El programa, paso a paso.
+                  </h2>
+                </AnimateOnScroll>
               )}
 
               {course.program && (
@@ -563,14 +573,6 @@ function summarySentences(summary: string) {
     else paras.push(sentence)
   }
   return paras
-}
-
-// ── Mosaico de objetivos: reparte 6 columnas según cuántos haya ─────────────
-function tileSpan(total: number, index: number) {
-  if (total === 5) return index < 2 ? 'md:col-span-3' : 'md:col-span-2'
-  if (total === 4 || total <= 2) return 'md:col-span-3'
-  if (total === 7) return index < 4 ? 'md:col-span-3' : 'md:col-span-2'
-  return 'md:col-span-2'
 }
 
 // ── Fichas prácticas: rejilla de 6 columnas sin huecos ──────────────────────
