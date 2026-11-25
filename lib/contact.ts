@@ -16,3 +16,13 @@ export function whatsappCourse(courseTitle: string) {
   )
   return `${CONTACT.whatsappBase}?text=${msg}`
 }
+
+/** "Avisadme de los próximos cursos" (sin base de datos: mensaje ya redactado). */
+export const NOTIFY = {
+  whatsapp: `${CONTACT.whatsappBase}?text=${encodeURIComponent(
+    'Hola, me gustaría que me avisarais cuando haya nuevos cursos en Dental Academy Vera.',
+  )}`,
+  email: `${CONTACT.emailHref}?subject=${encodeURIComponent('Avisadme de los próximos cursos')}&body=${encodeURIComponent(
+    'Hola, me gustaría que me avisarais cuando abráis nuevos cursos.\n\nNombre:\nEspecialidad o temas que me interesan:\n',
+  )}`,
+}

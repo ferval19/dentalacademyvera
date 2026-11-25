@@ -25,7 +25,7 @@ export default function Hero() {
   }
 
   return (
-    <section className="bg-white px-6 pt-[136px] md:pt-[160px] pb-20 md:pb-28">
+    <section id="inicio" className="bg-white px-6 pt-[136px] md:pt-[160px] pb-20 md:pb-28">
       <div className="text-center">
         <p className="text-[17px] md:text-[21px] font-semibold text-teal-deep mb-3">
           Próximo curso · {formatLongDate(course)}
@@ -42,48 +42,50 @@ export default function Hero() {
         </div>
       </div>
 
-      {/* Tarjeta del ponente: la "imagen de producto" del curso */}
-      {professor && (
-        <div className="mt-16 md:mt-20 max-w-[1080px] mx-auto rounded-[32px] bg-black text-white overflow-hidden grid grid-cols-1 md:grid-cols-2">
-          <div className="p-10 md:p-14 flex flex-col justify-end order-2 md:order-1">
-            {course.quote && (
-              <p className="text-balance text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.18] tracking-[-0.02em] mb-10">
-                &ldquo;{course.quote}&rdquo;
-              </p>
-            )}
-            <p className="text-[17px] font-semibold">{professor.name}</p>
-            <p className="text-[15px] text-white/60">{professor.tagline ?? professor.specialty}</p>
-            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/15 pt-6">
-              {[
-                { label: 'Fecha', value: formatShortDate(course) },
-                { label: 'Duración', value: course.duration.replace(/\s*horas?$/, ' h') },
-                { label: 'Plazas', value: String(course.spots) },
-              ].map((f) => (
-                <div key={f.label}>
-                  <dt className="text-[12px] text-white/50">{f.label}</dt>
-                  <dd className="tabular-nums text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.02em]">{f.value}</dd>
-                </div>
-              ))}
-            </dl>
-          </div>
-          <div className="relative min-h-[380px] md:min-h-[560px] order-1 md:order-2 bg-[#1d1d1f]">
-            {professor.imageUrl ? (
-              <Image
-                src={professor.imageUrl}
-                alt={professor.name}
-                fill
-                priority
-                sizes="(max-width: 768px) 100vw, 540px"
-                className="object-cover object-top"
-              />
-            ) : (
-              <span className="absolute inset-0 flex items-center justify-center text-[5rem] font-semibold text-white/30">
-                {professor.initials}
+      {/* Tarjeta de datos: lo que se decide antes de reservar (el ponente tiene su propia sección) */}
+      <div className="mt-16 md:mt-20 max-w-[1080px] mx-auto rounded-[32px] bg-black text-white overflow-hidden grid grid-cols-1 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)]">
+        <div className="p-10 md:p-14 flex flex-col justify-between gap-10 border-b md:border-b-0 md:border-r border-white/10">
+          {course.quote && (
+            <p className="text-balance text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.18] tracking-[-0.02em]">
+              &ldquo;{course.quote}&rdquo;
+            </p>
+          )}
+          {professor && (
+            <a href="#profesores" className="group flex items-center gap-4">
+              <span className="relative w-12 h-12 rounded-full overflow-hidden bg-white/10 flex-shrink-0">
+                {professor.avatarUrl ? (
+                  <Image src={professor.avatarUrl} alt="" fill sizes="48px" className="object-cover" />
+                ) : (
+                  <span className="absolute inset-0 flex items-center justify-center text-[14px] font-semibold text-white/60">
+                    {professor.initials}
+                  </span>
+                )}
               </span>
-            )}
-          </div>
+              <span>
+                <span className="block text-[13px] text-white/55">Imparte</span>
+                <span className="block text-[17px] font-semibold group-hover:underline underline-offset-4">{professor.name}</span>
+              </span>
+            </a>
+          )}
         </div>
-      )}
+        <dl className="p-10 md:p-14 grid grid-cols-2 gap-x-6 gap-y-10 content-center">
+          {[
+            { label: 'Fecha', value: formatShortDate(course), note: course.dateISO?.slice(0, 4) },
+            { label: 'Duración', value: course.duration.replace(/\s*horas?$/, ' h'), note: course.schedule },
+            { label: 'Plazas', value: String(course.spots), note: 'grupo reducido' },
+            { label: 'Precio', value: course.price != null ? `${course.price} €` : 'Consultar', note: course.price != null ? 'por asistente' : undefined },
+          ].map((f) => (
+            <div key={f.label}>
+              <dt className="text-[13px] text-white/55">{f.label}</dt>
+              <dd className="mt-1 tabular-nums text-[clamp(1.9rem,3.4vw,2.75rem)] font-semibold tracking-[-0.03em] leading-none">{f.value}</dd>
+              {f.note && <dd className="mt-2 text-[14px] text-white/55 leading-snug">{f.note}</dd>}
+            </div>
+          ))}
+          <div className="col-span-2 pt-6 border-t border-white/10 text-[15px] text-white/70">
+            {course.location} · Vera, Almería
+          </div>
+        </dl>
+      </div>
     </section>
   )
 }

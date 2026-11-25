@@ -21,14 +21,13 @@ export default function About() {
               buscan actualizar sus conocimientos y mejorar su práctica clínica diaria.
             </p>
             <p>
-              Desde Vera (Almería), ofrecemos cursos presenciales intensivos en instalaciones equipadas con la última
-              tecnología, combinados con formación online para llegar a profesionales de toda España y Latinoamérica.
+              Desde Vera (Almería), organizamos jornadas presenciales e intensivas con ponentes en activo y grupos
+              reducidos, pensadas para profesionales de toda España.
             </p>
             <p>
               Nuestro compromiso: que cada curso tenga un impacto directo y medible en la calidad de tu trabajo con
               pacientes.
             </p>
-            <p className="text-[15px] text-ink-2">Vera, Almería · Costa mediterránea, bien comunicada.</p>
           </div>
         </AnimateOnScroll>
       </div>

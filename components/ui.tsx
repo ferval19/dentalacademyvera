@@ -131,7 +131,9 @@ export function ChevronLink({
     </>
   )
   return href.startsWith('#') || href.startsWith('http') ? (
-    <a href={href} className={cls}>{inner}</a>
+    <a href={href} className={cls} {...(href.startsWith('http') && { target: '_blank', rel: 'noopener noreferrer' })}>
+      {inner}
+    </a>
   ) : (
     <Link href={href} className={cls}>{inner}</Link>
   )

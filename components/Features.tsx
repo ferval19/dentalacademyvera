@@ -20,7 +20,7 @@ export default function Features() {
         <Title id="por-que-heading" className="max-w-[18ch]">Formación pensada para clínicos exigentes.</Title>
       </AnimateOnScroll>
 
-      <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <ul className="grid grid-cols-1 md:grid-cols-2 gap-4">
         {features.map((feature, index) => {
           const Icon = ICON_MAP[feature.icon] ?? Target
           return (

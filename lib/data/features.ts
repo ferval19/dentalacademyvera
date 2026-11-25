@@ -1,40 +1,30 @@
 import type { Feature } from '@/types'
 
+// Solo razones que se pueden comprobar en los propios cursos (plazas, ponentes,
+// formato, lugar). Nada de promesas que todavía no existen.
 export const features: Feature[] = [
-  {
-    icon: 'target',
-    title: 'Práctica intensiva',
-    description:
-      'Aprende haciendo. Nuestros cursos priorizan la práctica clínica sobre la teoría, con casos reales y hands-on desde el primer momento.',
-  },
-  {
-    icon: 'stethoscope',
-    title: 'Profesores referentes',
-    description:
-      'Formadores con experiencia clínica contrastada y reconocimiento en el sector. Aprende directamente de quienes lideran cada especialidad.',
-  },
   {
     icon: 'users',
     title: 'Grupos reducidos',
     description:
-      'Máximo 15-20 alumnos por curso para garantizar una atención personalizada y la oportunidad de resolver todas tus dudas.',
+      'Entre 10 y 20 plazas por curso, para que puedas preguntar, comentar tus casos y hablar con el ponente.',
   },
   {
-    icon: 'award',
-    title: 'Certificación incluida',
+    icon: 'stethoscope',
+    title: 'Ponentes en activo',
     description:
-      'Todos nuestros cursos incluyen certificado de asistencia y aprovechamiento. Avanzamos hacia la acreditación CFC.',
+      'Clínicos que trabajan cada día en su especialidad y enseñan cómo lo hacen en su consulta.',
   },
   {
-    icon: 'banknote',
-    title: 'Precios accesibles',
+    icon: 'target',
+    title: 'Aplicable desde el lunes',
     description:
-      'Formación de alta calidad a precios competitivos. Ofrecemos facilidades de pago y descuentos por reserva anticipada.',
+      'Jornadas intensivas centradas en protocolos, casos reales y decisiones clínicas que puedes llevar a tu práctica.',
   },
   {
     icon: 'map-pin',
-    title: 'Ubicación privilegiada',
+    title: 'En Vera, Almería',
     description:
-      'Vera, en la costa de Almería, combina formación con un entorno inmejorable. Aprende y disfruta del Mediterráneo.',
+      'Un espacio de trabajo en la costa mediterránea, bien comunicado y fácil de combinar con un fin de semana.',
   },
 ]

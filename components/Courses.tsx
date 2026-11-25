@@ -8,6 +8,8 @@ import { Section, Eyebrow, Title, Lead, PillLink, ChevronLink } from './ui'
 
 export default function Courses() {
   const upcoming = getUpcomingCourses()
+  // Con un solo curso próximo, el hero ya lo presenta: no lo repetimos aquí
+  if (upcoming.length < 2) return null
 
   return (
     <Section id="cursos" tone="white" labelledBy="cursos-heading">
