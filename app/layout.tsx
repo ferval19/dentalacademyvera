@@ -10,7 +10,7 @@ const dmSans = DM_Sans({
   display: 'swap',
 })
 
-import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/site'
+import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE, versionedAsset } from '@/lib/site'
 
 export const viewport: Viewport = {
   width: 'device-width',
@@ -57,13 +57,13 @@ export const metadata: Metadata = {
     title: `${SITE_NAME} — Formación dental de excelencia`,
     description:
       'Cursos presenciales para dentistas en Vera (Almería), en grupos reducidos y con ponentes de referencia.',
-    images: [{ ...DEFAULT_OG_IMAGE, type: 'image/jpeg' }],
+    images: [{ ...DEFAULT_OG_IMAGE, url: versionedAsset(DEFAULT_OG_IMAGE.url), type: 'image/jpeg' }],
   },
   twitter: {
     card: 'summary_large_image',
     title: `${SITE_NAME} — Formación dental de excelencia`,
     description: 'Cursos presenciales para dentistas en Vera (Almería), en grupos reducidos y con ponentes de referencia.',
-    images: ['/og-image.jpg'],
+    images: [versionedAsset(DEFAULT_OG_IMAGE.url)],
   },
   alternates: { canonical: SITE_URL },
   robots: { index: true, follow: true, googleBot: { index: true, follow: true } },

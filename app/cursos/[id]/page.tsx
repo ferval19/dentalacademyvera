@@ -164,6 +164,9 @@ export default async function CoursePage({ params }: Props) {
     { value: course.duration.replace(/\s*horas?$/, ' h'), caption: course.schedule ?? 'Jornada intensiva' },
     { value: String(course.spots), caption: 'plazas como máximo' },
     { value: 'Vera', caption: course.location },
+    ...(course.price != null
+      ? [{ value: `${course.price} €`, caption: 'por asistente' }]
+      : []),
   ]
 
   const sectionLinks = [
@@ -347,11 +350,13 @@ export default async function CoursePage({ params }: Props) {
 
         {/* ── Cifras clave ───────────────────────────────────────── */}
         <section aria-label="Datos clave" className="bg-white px-6 pb-20 md:pb-28">
-          <dl className="max-w-[1080px] mx-auto grid grid-cols-2 md:grid-cols-4 border-t border-black/[0.08]">
+          <dl className={`max-w-[1080px] mx-auto grid grid-cols-2 ${FACTS.length === 5 ? 'md:grid-cols-5' : 'md:grid-cols-4'} border-t border-black/[0.08]`}>
             {FACTS.map((f, i) => (
               <div
                 key={f.caption}
-                className={`pt-8 pb-2 px-4 text-center ${i % 2 === 1 ? 'border-l border-black/[0.08]' : ''} ${
+                className={`pt-8 pb-2 px-4 text-center ${
+                  i === FACTS.length - 1 && FACTS.length % 2 === 1 ? 'col-span-2 md:col-span-1' : ''
+                } ${i % 2 === 1 ? 'border-l border-black/[0.08]' : ''} ${
                   i > 0 ? 'md:border-l md:border-black/[0.08]' : ''
                 } ${i > 1 ? 'border-t md:border-t-0 border-black/[0.08]' : ''}`}
               >

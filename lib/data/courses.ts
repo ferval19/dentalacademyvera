@@ -83,7 +83,7 @@ export const courses: Course[] = [
     date: '5 Feb 2027',
     dateISO: '2027-02-05',
     duration: '9 horas',
-    schedule: '9:30–14:00 y 16:00–20:00',
+    schedule: '9:30–14:00 y 16:00–20:30',
     location: 'The Work Club Vera',
     locationUrl: 'https://theworkclub.es',
     price: 300,
