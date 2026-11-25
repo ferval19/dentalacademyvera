@@ -18,8 +18,7 @@ export interface ProgramModule {
 export interface Collaborator {
   name: string
   url: string
-  logoUrl: string           // para la web (/public)
-  ogLogoB64?: string        // data URI para la imagen OG (edge runtime)
+  logoUrl: string           // ruta en /public (web e imagen para compartir)
 }
 
 export interface Course {

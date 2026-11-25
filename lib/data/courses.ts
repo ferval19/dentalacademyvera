@@ -1,6 +1,4 @@
 import type { Course, CourseFilter } from '@/types'
-import { ENDOGAL_WHITE_B64 } from '@/lib/endogal-b64'
-import { ORMCO_B64, SPARK_B64 } from '@/lib/sponsor-logos-b64'
 
 export const courses: Course[] = [
   {
@@ -29,7 +27,6 @@ export const courses: Course[] = [
         name: 'Endogal',
         url: 'https://www.endogal.com',
         logoUrl: '/images/patrocinadores/endogal.png',
-        ogLogoB64: ENDOGAL_WHITE_B64,
       },
     ],
     professorId: 'rafael-ibanez',
@@ -109,13 +106,11 @@ export const courses: Course[] = [
         name: 'Ormco',
         url: 'https://ormco.com',
         logoUrl: '/images/patrocinadores/ormco.png',
-        ogLogoB64: ORMCO_B64,
       },
       {
         name: 'Spark Clear Aligner System',
         url: 'https://sparkaligners.com',
         logoUrl: '/images/patrocinadores/spark.png',
-        ogLogoB64: SPARK_B64,
       },
     ],
     professorId: 'juan-manuel-bailon',

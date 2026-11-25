@@ -1,18 +1,51 @@
+import { readFile } from 'node:fs/promises'
+import path from 'node:path'
 import { ImageResponse } from 'next/og'
 import { courses, splitTitle } from '@/lib/data/courses'
 import { professors } from '@/lib/data/professors'
 
-export const runtime = 'edge'
+// Node (no edge) para poder leer fotos y logos de /public. Se prerenderiza en el
+// build (generateStaticParams), así que en producción es un archivo estático.
+export const runtime = 'nodejs'
 export const size = { width: 1200, height: 630 }
 export const contentType = 'image/png'
+
+export function generateStaticParams() {
+  return courses.map((c) => ({ id: c.id }))
+}
+
+const NAVY = '#1c2a3a'
+const TEAL = '#2BB5A0'
+
+// Retrato en arco
+const ARCH_W = 340
+const ARCH_H = 640 // sobresale por abajo: el arco "sale" del encuadre
+const ARCH_TOP = 58
+const ARCH_RIGHT = 84
+const ARCH_RADIUS = `${ARCH_W / 2}px ${ARCH_W / 2}px 0 0`
+
+async function publicDataUri(url: string) {
+  const file = await readFile(path.join(process.cwd(), 'public', url))
+  const ext = path.extname(url).slice(1).toLowerCase()
+  const mime = ext === 'jpg' || ext === 'jpeg' ? 'image/jpeg' : `image/${ext}`
+  return `data:${mime};base64,${file.toString('base64')}`
+}
 
 export default async function Image({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params
   const course = courses.find((c) => c.id === id)
   if (!course) return new Response('Not found', { status: 404 })
-  const [titleA, titleB] = splitTitle(course.title)
+
   const professor = professors.find((p) => p.id === course.professorId)
-  const logos = (course.collaborators ?? []).filter((c) => c.ogLogoB64)
+  const photo = professor?.imageUrl ? await publicDataUri(professor.imageUrl) : null
+  const logos = await Promise.all(
+    (course.collaborators ?? []).map(async (c) => ({ name: c.name, src: await publicDataUri(c.logoUrl) })),
+  )
+
+  // Título en dos líneas; el tamaño se ajusta a la línea más larga para no invadir el retrato
+  const [titleA, titleB] = splitTitle(course.title)
+  const longest = Math.max(titleA.length, titleB.length)
+  const titleSize = Math.min(66, Math.floor(650 / (longest * 0.5)))
 
   return new ImageResponse(
     (
@@ -21,137 +54,39 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           width: '1200px',
           height: '630px',
           display: 'flex',
-          flexDirection: 'column',
           position: 'relative',
-          background: 'linear-gradient(160deg, #1c2a3a 0%, #243040 50%, #2a3a50 100%)',
+          background: `linear-gradient(160deg, ${NAVY} 0%, #243040 55%, #2a3a50 100%)`,
           fontFamily: 'system-ui, -apple-system, Helvetica, Arial, sans-serif',
           overflow: 'hidden',
         }}
       >
-        {/* Grid pattern */}
+        {/* Retícula sutil */}
         <div
           style={{
             position: 'absolute',
             inset: 0,
+            display: 'flex',
             backgroundImage:
-              'repeating-linear-gradient(90deg,rgba(255,255,255,0.04) 0px,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 60px),' +
-              'repeating-linear-gradient(0deg,rgba(255,255,255,0.04) 0px,rgba(255,255,255,0.04) 1px,transparent 1px,transparent 60px)',
-            display: 'flex',
+              'repeating-linear-gradient(90deg,rgba(255,255,255,0.035) 0px,rgba(255,255,255,0.035) 1px,transparent 1px,transparent 60px),' +
+              'repeating-linear-gradient(0deg,rgba(255,255,255,0.035) 0px,rgba(255,255,255,0.035) 1px,transparent 1px,transparent 60px)',
           }}
         />
 
-        {/* Teal radial glow — top right */}
+        {/* Halo detrás del retrato */}
         <div
           style={{
             position: 'absolute',
-            top: '-120px',
-            right: '-80px',
-            width: '580px',
-            height: '580px',
+            top: '-60px',
+            right: '-40px',
+            width: '640px',
+            height: '640px',
             borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(43,181,160,0.22) 0%, rgba(43,181,160,0.10) 40%, transparent 70%)',
             display: 'flex',
+            background: 'radial-gradient(circle, rgba(43,181,160,0.24) 0%, rgba(43,181,160,0.08) 45%, transparent 70%)',
           }}
         />
 
-        {/* Teal glow — bottom left */}
-        <div
-          style={{
-            position: 'absolute',
-            bottom: '-100px',
-            left: '-80px',
-            width: '380px',
-            height: '380px',
-            borderRadius: '50%',
-            background:
-              'radial-gradient(circle, rgba(43,181,160,0.14) 0%, transparent 65%)',
-            display: 'flex',
-          }}
-        />
-
-        {/* Decorative ring top-left */}
-        <div
-          style={{
-            position: 'absolute',
-            top: '38px',
-            left: '50px',
-            width: '110px',
-            height: '110px',
-            borderRadius: '50%',
-            border: '1.5px solid rgba(255,255,255,0.10)',
-            display: 'flex',
-          }}
-        />
-        <div
-          style={{
-            position: 'absolute',
-            top: '52px',
-            left: '64px',
-            width: '82px',
-            height: '82px',
-            borderRadius: '50%',
-            border: '1px solid rgba(255,255,255,0.06)',
-            display: 'flex',
-          }}
-        />
-
-        {/* Tooth silhouette — right side */}
-        <div
-          style={{
-            position: 'absolute',
-            right: '90px',
-            top: '40px',
-            width: '320px',
-            height: '480px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            opacity: 0.12,
-          }}
-        >
-          <svg width="300" height="460" viewBox="0 0 300 460" fill="none">
-            {/* Crown */}
-            <path
-              d="M50 200 L30 130 L20 60 L55 25 L90 55 L110 20 L150 5 L190 20 L210 55 L245 25 L280 60 L270 130 L250 200 L210 230 L150 240 L90 230 Z"
-              fill="rgba(43,181,160,0.6)"
-              stroke="rgba(43,181,160,0.9)"
-              strokeWidth="3"
-            />
-            {/* Left root */}
-            <path
-              d="M90 230 L75 300 L80 370 L100 400 L120 390 L110 230 Z"
-              fill="rgba(43,181,160,0.5)"
-              stroke="rgba(43,181,160,0.8)"
-              strokeWidth="2"
-            />
-            {/* Right root */}
-            <path
-              d="M190 230 L210 390 L230 400 L250 370 L255 300 L240 230 Z"
-              fill="rgba(43,181,160,0.5)"
-              stroke="rgba(43,181,160,0.8)"
-              strokeWidth="2"
-            />
-            {/* Left canal */}
-            <path
-              d="M100 232 L92 340 L100 390"
-              stroke="rgba(43,181,160,0.9)"
-              strokeWidth="4"
-              fill="none"
-              strokeLinecap="round"
-            />
-            {/* Right canal */}
-            <path
-              d="M200 232 L208 340 L200 390"
-              stroke="rgba(43,181,160,0.9)"
-              strokeWidth="4"
-              fill="none"
-              strokeLinecap="round"
-            />
-          </svg>
-        </div>
-
-        {/* Top accent bar */}
+        {/* Barra de acento superior */}
         <div
           style={{
             position: 'absolute',
@@ -159,199 +94,230 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             left: 0,
             right: 0,
             height: '5px',
-            background: 'linear-gradient(90deg, #2BB5A0 0%, rgba(43,181,160,0.3) 60%, transparent 100%)',
             display: 'flex',
+            background: `linear-gradient(90deg, ${TEAL} 0%, rgba(43,181,160,0.35) 60%, transparent 100%)`,
           }}
         />
 
-        {/* Academy name — top right */}
+        {/* ── Retrato ─────────────────────────────────────────── */}
+        {/* Arco fino desplazado: da profundidad */}
         <div
           style={{
             position: 'absolute',
-            top: '36px',
-            right: '52px',
-            color: 'rgba(255,255,255,0.40)',
-            fontSize: '15px',
-            fontWeight: 600,
-            letterSpacing: '0.12em',
-            textTransform: 'uppercase',
+            top: `${ARCH_TOP - 18}px`,
+            right: `${ARCH_RIGHT - 18}px`,
+            width: `${ARCH_W}px`,
+            height: `${ARCH_H}px`,
+            borderRadius: ARCH_RADIUS,
+            border: '1.5px solid rgba(43,181,160,0.55)',
             display: 'flex',
           }}
-        >
-          DENTAL ACADEMY VERA
-        </div>
-
-        {/* Main content */}
+        />
         <div
           style={{
-            position: 'relative',
+            position: 'absolute',
+            top: `${ARCH_TOP}px`,
+            right: `${ARCH_RIGHT}px`,
+            width: `${ARCH_W}px`,
+            height: `${ARCH_H}px`,
+            borderRadius: ARCH_RADIUS,
+            overflow: 'hidden',
             display: 'flex',
-            flexDirection: 'column',
-            padding: '130px 80px 60px',
-            flex: 1,
+            background: 'linear-gradient(180deg, #e9eef0 0%, #cfdadc 100%)',
+            boxShadow: '0 30px 60px rgba(0,0,0,0.35)',
           }}
         >
-          {/* Category row */}
-          <div style={{ display: 'flex', alignItems: 'center', gap: '16px', marginBottom: '18px' }}>
-            <div style={{ width: '32px', height: '3px', background: '#2BB5A0', display: 'flex' }} />
-            <span
-              style={{
-                color: '#2BB5A0',
-                fontSize: '16px',
-                fontWeight: 700,
-                letterSpacing: '0.13em',
-                textTransform: 'uppercase',
-                display: 'flex',
-              }}
-            >
-              {course.categoryLabel}
-            </span>
-            {course.includesPractice && (
-              <div
-                style={{
-                  background: 'rgba(43,181,160,0.18)',
-                  border: '1px solid rgba(43,181,160,0.45)',
-                  borderRadius: '100px',
-                  padding: '4px 16px',
-                  color: '#2BB5A0',
-                  fontSize: '13px',
-                  fontWeight: 700,
-                  letterSpacing: '0.08em',
-                  textTransform: 'uppercase',
-                  display: 'flex',
-                }}
-              >
-                INCLUYE PRÁCTICA
-              </div>
-            )}
-          </div>
-
-          {/* Title */}
-          <div
-            style={{
-              color: 'white',
-              fontSize: course.title.length > 40 ? '56px' : '68px',
-              fontWeight: 800,
-              lineHeight: 1.05,
-              maxWidth: course.title.length > 40 ? '820px' : '720px',
-              marginBottom: '24px',
-              display: 'flex',
-              flexDirection: 'column',
-            }}
-          >
-            <span style={{ display: 'flex' }}>{titleA}</span>
-            {titleB && <span style={{ color: '#2BB5A0', display: 'flex' }}>{titleB}</span>}
-          </div>
-
-          {/* Subtitle */}
-          {course.subtitle && (
+          {photo ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={photo}
+              alt=""
+              width={ARCH_W}
+              height={ARCH_H}
+              style={{ objectFit: 'cover', objectPosition: 'center top' }}
+            />
+          ) : (
             <div
               style={{
-                color: 'rgba(255,255,255,0.60)',
-                fontSize: '22px',
-                maxWidth: '620px',
-                lineHeight: 1.45,
-                marginBottom: '32px',
+                width: '100%',
+                height: '70%',
                 display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                color: TEAL,
+                fontSize: '96px',
+                fontWeight: 700,
               }}
             >
-              {course.subtitle}
+              {professor?.initials ?? 'DAV'}
             </div>
           )}
 
-          {/* Meta row (la línea superior hace de divisor) */}
-          <div
-            style={{
-              display: 'flex',
-              gap: '36px',
-              paddingTop: '24px',
-              borderTop: '1px solid rgba(255,255,255,0.14)',
-              maxWidth: '760px',
-            }}
-          >
-            {[
-              { label: 'FECHA', value: course.date },
-              { label: 'DURACIÓN', value: course.duration },
-              { label: 'PLAZAS', value: `${course.spots} máx.` },
-              ...(professor ? [{ label: 'PONENTE', value: professor.name }] : []),
-            ].map(({ label, value }) => (
-              <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}>
-                <span style={{ color: '#2BB5A0', fontSize: '12px', fontWeight: 700, letterSpacing: '0.1em', display: 'flex' }}>
-                  {label}
-                </span>
-                <span style={{ color: 'rgba(255,255,255,0.78)', fontSize: '19px', fontWeight: 500, display: 'flex' }}>
-                  {value}
-                </span>
-              </div>
-            ))}
-          </div>
-
-          {/* URL watermark */}
+          {/* Degradado para el rótulo del ponente */}
           <div
             style={{
               position: 'absolute',
-              bottom: '28px',
-              left: '80px',
-              color: 'rgba(255,255,255,0.30)',
-              fontSize: '14px',
-              letterSpacing: '0.04em',
+              left: 0,
+              right: 0,
+              bottom: 0,
+              height: '360px',
               display: 'flex',
+              background: 'linear-gradient(180deg, rgba(20,30,42,0) 0%, rgba(20,30,42,0.55) 30%, rgba(20,30,42,0.9) 58%, rgba(20,30,42,0.97) 100%)',
             }}
-          >
-            dentalacademyvera.com
-          </div>
+          />
 
-          {/* Collaborator logo */}
-          {logos.length > 0 && (
-          <div
-            style={{
-              position: 'absolute',
-              bottom: '22px',
-              right: '52px',
-              display: 'flex',
-              alignItems: 'center',
-              gap: '10px',
-            }}
-          >
-            <span
-              style={{
-                color: 'rgba(255,255,255,0.28)',
-                fontSize: '11px',
-                fontWeight: 600,
-                letterSpacing: '0.10em',
-                textTransform: 'uppercase',
-                display: 'flex',
-              }}
-            >
-              {logos.length > 1 ? 'COLABORAN' : 'COLABORA'}
-            </span>
+          {professor && (
             <div
               style={{
-                background: 'white',
-                borderRadius: '6px',
-                padding: '6px 12px',
+                position: 'absolute',
+                left: '28px',
+                right: '24px',
+                bottom: `${ARCH_H - (630 - ARCH_TOP) + 34}px`,
                 display: 'flex',
-                alignItems: 'center',
-                gap: '18px',
+                flexDirection: 'column',
               }}
             >
-              {logos.map((logo) => (
-                // eslint-disable-next-line @next/next/no-img-element
-                <img
-                  key={logo.name}
-                  src={logo.ogLogoB64}
-                  alt={logo.name}
-                  width={logos.length > 1 ? 110 : 90}
-                  height={logos.length > 1 ? 40 : 60}
-                  style={{ objectFit: 'contain', display: 'flex' }}
-                />
+              <span style={{ color: TEAL, fontSize: '13px', fontWeight: 700, letterSpacing: '0.16em', display: 'flex', marginBottom: '6px' }}>
+                PONENTE
+              </span>
+              <span style={{ color: 'white', fontSize: '25px', fontWeight: 700, lineHeight: 1.15, display: 'flex' }}>
+                {professor.name}
+              </span>
+              {professor.tagline && (
+                <span style={{ color: 'rgba(255,255,255,0.62)', fontSize: '15px', marginTop: '6px', display: 'flex' }}>
+                  {professor.tagline}
+                </span>
+              )}
+            </div>
+          )}
+        </div>
+
+        {/* ── Columna de texto ────────────────────────────────── */}
+        <div
+          style={{
+            position: 'absolute',
+            left: '80px',
+            top: '44px',
+            bottom: '40px',
+            width: '660px',
+            display: 'flex',
+            flexDirection: 'column',
+          }}
+        >
+          {/* Marca */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '12px', color: 'rgba(255,255,255,0.55)', fontSize: '15px', fontWeight: 600, letterSpacing: '0.16em' }}>
+            DENTAL ACADEMY <span style={{ color: TEAL, display: 'flex' }}>VERA</span>
+          </div>
+
+          {/* Bloque principal centrado en vertical */}
+          <div style={{ display: 'flex', flexDirection: 'column', flex: 1, justifyContent: 'center' }}>
+            <div style={{ display: 'flex', alignItems: 'center', gap: '14px', marginBottom: '20px' }}>
+              <div style={{ width: '32px', height: '3px', background: TEAL, display: 'flex' }} />
+              <span style={{ color: TEAL, fontSize: '16px', fontWeight: 700, letterSpacing: '0.14em', display: 'flex' }}>
+                {course.categoryLabel.toUpperCase()}
+              </span>
+              {course.includesPractice && (
+                <span
+                  style={{
+                    border: '1px solid rgba(43,181,160,0.5)',
+                    background: 'rgba(43,181,160,0.15)',
+                    borderRadius: '100px',
+                    padding: '4px 14px',
+                    color: TEAL,
+                    fontSize: '12px',
+                    fontWeight: 700,
+                    letterSpacing: '0.08em',
+                    display: 'flex',
+                  }}
+                >
+                  INCLUYE PRÁCTICA
+                </span>
+              )}
+            </div>
+
+            <div
+              style={{
+                display: 'flex',
+                flexDirection: 'column',
+                color: 'white',
+                fontSize: `${titleSize}px`,
+                fontWeight: 800,
+                lineHeight: 1.08,
+                letterSpacing: '-0.01em',
+                marginBottom: '22px',
+              }}
+            >
+              <span style={{ display: 'flex' }}>{titleA}</span>
+              {titleB && <span style={{ display: 'flex', color: TEAL }}>{titleB}</span>}
+            </div>
+
+            {course.subtitle && (
+              <div style={{ display: 'flex', color: 'rgba(255,255,255,0.62)', fontSize: '23px', marginBottom: '34px' }}>
+                {course.subtitle}
+              </div>
+            )}
+
+            <div
+              style={{
+                display: 'flex',
+                gap: '44px',
+                paddingTop: '22px',
+                borderTop: '1px solid rgba(255,255,255,0.14)',
+                width: '600px',
+              }}
+            >
+              {[
+                { label: 'FECHA', value: course.date },
+                { label: 'DURACIÓN', value: course.duration },
+                { label: 'PLAZAS', value: `${course.spots} máx.` },
+                { label: 'LUGAR', value: 'Vera, Almería' },
+              ].map(({ label, value }) => (
+                <div key={label} style={{ display: 'flex', flexDirection: 'column', gap: '5px' }}>
+                  <span style={{ color: TEAL, fontSize: '12px', fontWeight: 700, letterSpacing: '0.12em', display: 'flex' }}>{label}</span>
+                  <span style={{ color: 'rgba(255,255,255,0.85)', fontSize: '20px', fontWeight: 500, display: 'flex' }}>{value}</span>
+                </div>
               ))}
             </div>
           </div>
-          )}
+
+          {/* Pie: web + colaboradores */}
+          <div style={{ display: 'flex', alignItems: 'center', gap: '28px' }}>
+            <span style={{ color: 'rgba(255,255,255,0.4)', fontSize: '15px', letterSpacing: '0.03em', display: 'flex' }}>
+              dentalacademyvera.com
+            </span>
+            {logos.length > 0 && (
+              <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ color: 'rgba(255,255,255,0.35)', fontSize: '11px', fontWeight: 700, letterSpacing: '0.12em', display: 'flex' }}>
+                  {logos.length > 1 ? 'COLABORAN' : 'COLABORA'}
+                </span>
+                <div
+                  style={{
+                    background: 'white',
+                    borderRadius: '8px',
+                    padding: '7px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '18px',
+                  }}
+                >
+                  {logos.map((logo) => (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img
+                      key={logo.name}
+                      src={logo.src}
+                      alt={logo.name}
+                      width={logos.length > 1 ? 104 : 84}
+                      height={logos.length > 1 ? 36 : 44}
+                      style={{ objectFit: 'contain' }}
+                    />
+                  ))}
+                </div>
+              </div>
+            )}
+          </div>
         </div>
       </div>
     ),
-    { width: 1200, height: 630 },
+    { ...size },
   )
 }
