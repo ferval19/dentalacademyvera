@@ -292,7 +292,16 @@ export default async function CoursePage({ params }: Props) {
         </div>
 
         {/* ── Hero ───────────────────────────────────────────────── */}
-        <section className="bg-white px-6 pt-20 md:pt-28 pb-16 md:pb-20 text-center">
+        <section className="relative isolate overflow-hidden bg-white px-6 pt-20 md:pt-28 pb-16 md:pb-20 text-center">
+          {/* Halo de color: resplandor verde muy suave que cae desde arriba */}
+          <div
+            aria-hidden
+            className="pointer-events-none absolute inset-0 -z-10"
+            style={{
+              background:
+                'radial-gradient(ellipse 70% 60% at 50% -10%, rgba(43,181,160,0.20) 0%, rgba(43,181,160,0.08) 40%, rgba(255,255,255,0) 72%)',
+            }}
+          />
           <p className="text-[17px] md:text-[21px] font-semibold text-teal-deep mb-3">
             {course.categoryLabel}
             {past && <span className="text-ink-2 font-normal"> · Edición celebrada</span>}
