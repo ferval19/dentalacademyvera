@@ -35,7 +35,9 @@ export default function Trajectory() {
       </AnimateOnScroll>
 
       <AnimateOnScroll delay={100}>
-        <ol className="md:flex md:overflow-x-auto md:snap-x md:snap-mandatory md:pb-4 [scrollbar-width:thin]">
+        {/* md:pt-3: el scroll horizontal recorta también en vertical; este margen
+            deja sitio a los puntos (y al halo del activo) que sobresalen de la línea */}
+        <ol className="md:flex md:overflow-x-auto md:snap-x md:snap-mandatory md:pt-4 md:pb-4 [scrollbar-width:thin]">
           {editions.map((course, idx) => {
             const past = isPastCourse(course)
             const isNext = course.id === next?.id
@@ -43,12 +45,12 @@ export default function Trajectory() {
             return (
               <li
                 key={course.id}
-                className="relative snap-start border-l md:border-l-0 md:border-t border-black/[0.12] pl-8 pb-12 md:pl-0 md:pb-0 md:pt-10 md:pr-12 md:w-[340px] md:flex-shrink-0"
+                className="relative snap-start border-l md:border-l-0 md:border-t border-black/[0.2] pl-8 pb-12 md:pl-0 md:pb-0 md:pt-10 md:pr-12 md:w-[340px] md:flex-shrink-0"
               >
                 <span
                   aria-hidden
-                  className={`absolute -left-[6px] top-[6px] md:left-0 md:-top-[6px] w-[11px] h-[11px] rounded-full ${
-                    isNext ? 'bg-teal-deep ring-4 ring-teal-deep/15' : 'bg-white border-2 border-ink/30'
+                  className={`absolute -left-[7.5px] top-[3px] md:left-0 md:-top-[7.5px] w-[14px] h-[14px] rounded-full ${
+                    isNext ? 'bg-teal-deep ring-[5px] ring-teal-deep/15' : 'bg-white border-2 border-ink/40'
                   }`}
                 />
                 <p className={`text-[14px] font-semibold mb-2 ${isNext ? 'text-teal-deep' : 'text-ink-2'}`}>
@@ -77,8 +79,8 @@ export default function Trajectory() {
               </li>
             )
           })}
-          <li aria-hidden className="relative border-l md:border-l-0 md:border-t border-dashed border-black/[0.15] pl-8 md:pl-0 md:pt-10 md:flex-1 md:min-w-[200px]">
-            <span className="absolute -left-[6px] top-[6px] md:left-0 md:-top-[6px] w-[11px] h-[11px] rounded-full border-2 border-dashed border-ink/25 bg-white" />
+          <li aria-hidden className="relative border-l md:border-l-0 md:border-t border-dashed border-black/[0.2] pl-8 md:pl-0 md:pt-10 md:flex-1 md:min-w-[200px]">
+            <span className="absolute -left-[7.5px] top-[3px] md:left-0 md:-top-[7.5px] w-[14px] h-[14px] rounded-full border-2 border-dashed border-ink/30 bg-white" />
             <p className="text-[17px] text-ink-2">Próximas ediciones, muy pronto.</p>
           </li>
         </ol>
