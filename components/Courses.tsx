@@ -1,8 +1,8 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { CalendarDays, Clock, MapPin, Users, MessageCircle, Phone } from 'lucide-react'
+import { CalendarDays, Clock, MapPin, Users, MessageCircle, Phone, Check } from 'lucide-react'
 import AnimateOnScroll from './AnimateOnScroll'
-import { courses } from '@/lib/data/courses'
+import { getNextCourse, formatPrice } from '@/lib/data/courses'
 import { professors } from '@/lib/data/professors'
 import { CONTACT, whatsappCourse } from '@/lib/contact'
 
@@ -13,8 +13,8 @@ const MODALITY_LABEL: Record<string, string> = {
 }
 
 export default function Courses() {
-  const course = courses[0]
-  if (!course) return null
+  const course = getNextCourse()
+  if (!course) return <NoUpcomingCourse />
 
   const professor = course.professorId
     ? professors.find((p) => p.id === course.professorId)
@@ -43,7 +43,8 @@ export default function Courses() {
             Próximo curso
           </h2>
           <p className="text-[1.1rem] text-gray-500 max-w-[580px] leading-[1.75]">
-            Una jornada intensiva con uno de los referentes de la endodoncia en España.
+            {course.subtitle ? `${course.subtitle}. ` : ''}Una jornada intensiva de {course.categoryLabel.toLowerCase()}
+            {professor ? ` con el ${professor.name}` : ''}.
           </p>
         </AnimateOnScroll>
 
@@ -151,7 +152,7 @@ export default function Courses() {
                     <div>
                       <div className="font-body font-semibold text-[0.95rem]">{professor.name}</div>
                       <div className="font-label text-[0.73rem] text-teal uppercase tracking-[0.04em]">
-                        {professor.specialty}
+                        {professor.tagline ?? professor.specialty}
                       </div>
                     </div>
                   </div>
@@ -161,8 +162,8 @@ export default function Courses() {
               {/* Price + CTAs */}
               <div>
                 <div className="mb-5">
-                  <div className="font-display text-[2.6rem] font-bold text-teal leading-none">
-                    {course.price} €
+                  <div className={`font-display font-bold text-teal leading-none ${course.price != null ? 'text-[2.6rem]' : 'text-[1.9rem]'}`}>
+                    {formatPrice(course)}
                   </div>
                 </div>
                 <div className="grid grid-cols-2 gap-3">
@@ -229,6 +230,49 @@ export default function Courses() {
             </div>
           </AnimateOnScroll>
         )}
+
+        {/* ── Objectives preview (cursos sin módulos) ─────────── */}
+        {!course.program && course.objectives && (
+          <AnimateOnScroll delay={100} className="mt-1">
+            <div className="border border-t-0 border-gray-200 rounded-b-xl bg-off-white p-7 md:p-9">
+              <h4 className="font-label text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-gray-400 mb-5">
+                Objetivos de aprendizaje
+              </h4>
+              <ul className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-8 gap-y-3">
+                {course.objectives.map((objective) => (
+                  <li key={objective} className="flex gap-3 items-start text-[0.92rem] text-gray-600 leading-[1.5]">
+                    <Check className="w-4 h-4 text-teal flex-shrink-0 mt-[3px] stroke-[2.5]" />
+                    <span>{objective}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          </AnimateOnScroll>
+        )}
+      </div>
+    </section>
+  )
+}
+
+function NoUpcomingCourse() {
+  return (
+    <section className="py-[110px] bg-white" id="cursos">
+      <div className="max-w-[1200px] mx-auto px-6 text-center">
+        <h2 className="font-display text-[clamp(2.1rem,3.5vw,3rem)] font-bold text-navy leading-[1.15] mb-4">
+          Próximos cursos
+        </h2>
+        <p className="text-[1.1rem] text-gray-500 max-w-[580px] mx-auto leading-[1.75] mb-8">
+          Estamos preparando nuevas fechas. Escríbenos y te avisamos en cuanto abramos inscripciones.
+        </p>
+        <a
+          href={CONTACT.whatsappGeneral}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-2 px-7 py-[13px] rounded-[8px] bg-[#25D366] text-white font-body font-semibold text-[0.95rem] hover:bg-[#20BD5A] transition-colors"
+        >
+          <MessageCircle className="w-4 h-4 stroke-[2]" />
+          Avisadme por WhatsApp
+        </a>
       </div>
     </section>
   )

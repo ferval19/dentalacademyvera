@@ -42,7 +42,7 @@ export const metadata: Metadata = {
     template: `%s — ${SITE_NAME}`,
   },
   description:
-    'Formación dental de excelencia en Vera, Almería. Cursos presenciales y online impartidos por profesionales referentes del sector. Endodoncia, estética, implantología y más.',
+    'Formación dental de excelencia en Vera, Almería. Cursos presenciales y online impartidos por profesionales referentes del sector. Endodoncia, ortodoncia con alineadores, estética y más.',
   keywords: [
     'formación dental Vera Almería',
     'cursos odontología',
@@ -52,6 +52,10 @@ export const metadata: Metadata = {
     'cursos dentistas Almería',
     'endodoncia microscópica',
     'Dr Rafael Ibáñez endodoncia',
+    'curso alineadores transparentes',
+    'alineadores en pacientes en crecimiento',
+    'ortodoncia interceptiva alineadores',
+    'Dr Juan Manuel Bailón Rivera',
   ],
   authors: [{ name: SITE_NAME }],
   creator: SITE_NAME,

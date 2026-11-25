@@ -1,17 +1,24 @@
 import Image from 'next/image'
-import { Clock, Users, FlaskConical, CalendarDays } from 'lucide-react'
+import { Clock, Users, CalendarCheck, CalendarDays } from 'lucide-react'
 import { professors } from '@/lib/data/professors'
-
-const STATS = [
-  { number: '8h', label: 'Formación intensiva', icon: Clock },
-  { number: '10', label: 'Plazas limitadas', icon: Users },
-  { number: '100%', label: 'Práctica clínica', icon: FlaskConical },
-  { number: '29 May', label: 'Próxima edición', icon: CalendarDays },
-]
-
-const professor = professors[0]
+import { getNextCourse, formatLongDate, formatShortDate, splitTitle } from '@/lib/data/courses'
 
 export default function Hero() {
+  const course = getNextCourse()
+  const professor = course?.professorId
+    ? professors.find((p) => p.id === course.professorId)
+    : undefined
+  const [titleA, titleB] = course ? splitTitle(course.title) : ['Formación dental', 'de excelencia']
+
+  const STATS = course
+    ? [
+        { number: course.duration.replace(/\s*horas?$/, 'h'), label: 'Formación intensiva', icon: Clock },
+        { number: String(course.spots), label: 'Plazas limitadas', icon: Users },
+        { number: '1', label: 'Jornada completa', icon: CalendarCheck },
+        { number: formatShortDate(course), label: 'Próxima edición', icon: CalendarDays },
+      ]
+    : []
+
   return (
     <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden pt-[72px]">
       <div className="absolute inset-0 hero-radial-overlay pointer-events-none" />
@@ -23,21 +30,23 @@ export default function Hero() {
         <div className="text-white text-center lg:text-left">
           <div className="inline-flex items-center gap-2 bg-teal/[0.12] border border-teal/[0.25] px-4 py-[9px] rounded-full font-label text-[0.82rem] font-medium tracking-[0.06em] uppercase mb-8 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.1s_both]">
             <span className="w-[6px] h-[6px] bg-teal rounded-full animate-blink flex-shrink-0" />
-            Vera, Almería · 29 de mayo de 2026
+            Vera, Almería{course ? ` · ${formatLongDate(course)}` : ''}
           </div>
 
           <h1 className="font-display text-[clamp(2.6rem,5vw,4rem)] font-bold leading-[1.12] mb-6 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.2s_both]">
-            Actualización en{' '}
-            <em className="italic text-teal not-italic">
-              <span className="italic">Endodoncia</span>
-            </em>
-            <br />
-            <em className="italic text-teal">Clínica</em>
+            {titleA}
+            {titleB && (
+              <>
+                <br />
+                <em className="italic text-teal">{titleB}</em>
+              </>
+            )}
           </h1>
 
           <p className="text-[1.15rem] leading-[1.78] opacity-[0.82] max-w-[500px] mb-10 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.35s_both] mx-auto lg:mx-0">
-            Ponte al día desde el diagnóstico hasta la obturación. Un día intensivo con el
-            Dr. Rafael Ibáñez — referente en Endodoncia Exclusiva.
+            {course
+              ? <>{course.subtitle ? `${course.subtitle}. ` : ''}Una jornada intensiva{professor ? ` con el ${professor.name}` : ''}.</>
+              : 'Pronto anunciaremos las próximas fechas. Escríbenos y te avisamos.'}
           </p>
 
           <div className="flex gap-4 flex-wrap justify-center lg:justify-start animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.5s_both]">
@@ -57,6 +66,7 @@ export default function Hero() {
         </div>
 
         {/* ── Stats card ──────────────────────────────────── */}
+        {course && (
         <div className="animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.4s_both] max-w-[480px] mx-auto lg:mx-0 w-full">
           <div className="bg-white/[0.06] border border-white/10 rounded-xl p-10 backdrop-blur-xl">
             <div className="grid grid-cols-2 gap-6">
@@ -78,10 +88,11 @@ export default function Hero() {
               })}
             </div>
 
+            {professor && (
             <div className="mt-8 pt-6 border-t border-white/10 text-white">
               <div className="flex items-center gap-3 mb-3">
                 <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/20">
-                  {professor?.avatarUrl ? (
+                  {professor.avatarUrl ? (
                     <Image
                       src={professor.avatarUrl}
                       alt={professor.name}
@@ -91,23 +102,27 @@ export default function Hero() {
                     />
                   ) : (
                     <div className="w-full h-full bg-white/10 flex items-center justify-center font-label text-[0.8rem] text-teal font-bold">
-                      RI
+                      {professor.initials}
                     </div>
                   )}
                 </div>
                 <div>
-                  <div className="font-display text-[0.98rem] font-semibold">Dr. Rafael Ibáñez</div>
+                  <div className="font-display text-[0.98rem] font-semibold">{professor.name}</div>
                   <div className="font-label text-[0.74rem] text-teal opacity-90 uppercase tracking-[0.04em]">
-                    Endodoncia Exclusiva · KOL Endogal
+                    {professor.tagline ?? professor.specialty}
                   </div>
                 </div>
               </div>
-              <p className="font-display italic text-[0.97rem] opacity-[0.72] leading-relaxed pl-[52px]">
-                "Ponte al día en diagnóstico, instrumentación, irrigación y obturación en una sola jornada."
-              </p>
+              {course.quote && (
+                <p className="font-display italic text-[0.97rem] opacity-[0.72] leading-relaxed pl-[52px]">
+                  &ldquo;{course.quote}&rdquo;
+                </p>
+              )}
             </div>
+            )}
           </div>
         </div>
+        )}
       </div>
     </section>
   )

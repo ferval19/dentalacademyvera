@@ -1,6 +1,5 @@
 import { ImageResponse } from 'next/og'
-import { courses } from '@/lib/data/courses'
-import { ENDOGAL_WHITE_B64 } from '@/lib/endogal-b64'
+import { courses, splitTitle } from '@/lib/data/courses'
 
 export const runtime = 'edge'
 export const size = { width: 1200, height: 630 }
@@ -10,6 +9,8 @@ export default async function Image({ params }: { params: Promise<{ id: string }
   const { id } = await params
   const course = courses.find((c) => c.id === id)
   if (!course) return new Response('Not found', { status: 404 })
+  const [titleA, titleB] = splitTitle(course.title)
+  const collaborator = course.collaborator
 
   return new ImageResponse(
     (
@@ -227,19 +228,17 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           <div
             style={{
               color: 'white',
-              fontSize: '68px',
+              fontSize: course.title.length > 40 ? '56px' : '68px',
               fontWeight: 800,
               lineHeight: 1.05,
-              maxWidth: '720px',
+              maxWidth: course.title.length > 40 ? '820px' : '720px',
               marginBottom: '24px',
               display: 'flex',
               flexDirection: 'column',
             }}
           >
-            <span style={{ display: 'flex' }}>{course.title.split(' en ')[0] + ' en'}</span>
-            <span style={{ color: '#2BB5A0', display: 'flex' }}>
-              {course.title.includes(' en ') ? course.title.split(' en ')[1] : ''}
-            </span>
+            <span style={{ display: 'flex' }}>{titleA}</span>
+            {titleB && <span style={{ color: '#2BB5A0', display: 'flex' }}>{titleB}</span>}
           </div>
 
           {/* Subtitle */}
@@ -303,6 +302,7 @@ export default async function Image({ params }: { params: Promise<{ id: string }
           </div>
 
           {/* Collaborator logo */}
+          {collaborator?.ogLogoB64 && (
           <div
             style={{
               position: 'absolute',
@@ -336,14 +336,15 @@ export default async function Image({ params }: { params: Promise<{ id: string }
             >
               {/* eslint-disable-next-line @next/next/no-img-element */}
               <img
-                src={ENDOGAL_WHITE_B64}
-                alt="Endogal"
+                src={collaborator.ogLogoB64}
+                alt={collaborator.name}
                 width={90}
                 height={60}
                 style={{ objectFit: 'contain', display: 'flex' }}
               />
             </div>
           </div>
+          )}
         </div>
       </div>
     ),

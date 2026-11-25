@@ -15,6 +15,13 @@ export interface ProgramModule {
   topics: string[]
 }
 
+export interface Collaborator {
+  name: string
+  url: string
+  logoUrl: string           // para la web (/public)
+  ogLogoB64?: string        // data URI para la imagen OG (edge runtime)
+}
+
 export interface Course {
   id: string
   title: string
@@ -25,8 +32,9 @@ export interface Course {
   date: string
   dateISO?: string          // ISO 8601 para JSON-LD y meta
   duration: string
+  schedule?: string         // horario, p. ej. "9:30–14:00 y 16:00–20:00"
   location: string
-  price: number
+  price?: number            // sin precio → "Consultar precio"
   spots: number
   emoji: string
   gradient: string
@@ -36,6 +44,10 @@ export interface Course {
   locationUrl?: string
   includes?: string[]
   program?: ProgramModule[]
+  summary?: string          // párrafo descriptivo del curso
+  objectives?: string[]     // objetivos de aprendizaje
+  quote?: string            // frase destacada en el hero de la portada
+  collaborator?: Collaborator
   professorId?: string
 }
 
@@ -55,7 +67,8 @@ export interface Professor {
   initials: string
   name: string
   specialty: string
-  bio: string
+  tagline?: string          // línea corta bajo el nombre, p. ej. "Endodoncia · KOL Endogal"
+  bio?: string
   credentials?: string[]
   credentialGroups?: CredentialGroup[]
   imageUrl?: string

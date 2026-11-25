@@ -4,9 +4,10 @@ import Image from 'next/image'
 import Link from 'next/link'
 import {
   CalendarDays, Clock, MapPin, Users, MessageCircle, Phone,
-  GraduationCap, ChevronRight,
+  GraduationCap, ChevronRight, Check, Timer,
 } from 'lucide-react'
-import { courses } from '@/lib/data/courses'
+import { courses, formatPrice, isPastCourse, getNextCourse } from '@/lib/data/courses'
+import type { Collaborator } from '@/types'
 import { professors } from '@/lib/data/professors'
 import { CONTACT, whatsappCourse } from '@/lib/contact'
 import Nav from '@/components/Nav'
@@ -28,10 +29,12 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const course = courses.find((c) => c.id === id)
   if (!course) return {}
 
+  const professor = professors.find((p) => p.id === course.professorId)
   const title = course.title
   const description =
-    course.subtitle ??
-    `Curso de ${course.categoryLabel} en ${course.location}. ${course.date}. Impartido por Dr. Rafael Ibáñez.`
+    `Curso de ${course.categoryLabel} en ${course.location} (Vera, Almería). ${course.date}.` +
+    (professor ? ` Impartido por ${professor.name}.` : '') +
+    (course.summary ? ` ${course.summary.split('. ')[0]}.` : course.subtitle ? ` ${course.subtitle}.` : '')
   const pageUrl = `${SITE_URL}/cursos/${id}`
 
   return {
@@ -65,33 +68,39 @@ export default async function CoursePage({ params }: Props) {
     : undefined
 
   const courseUrl = `${SITE_URL}/cursos/${course.id}`
+  const past = isPastCourse(course)
+  const nextCourse = past ? getNextCourse() : undefined
+  const priceLabel = formatPrice(course)
 
   const jsonLd = {
     '@context': 'https://schema.org',
     '@type': 'Course',
     name: course.title,
     description:
+      course.summary ??
       course.subtitle ??
       `Curso de ${course.categoryLabel} en ${course.location}. ${course.date}. Formación presencial impartida por referentes del sector.`,
     url: courseUrl,
     educationalLevel: 'Professional',
-    teaches: course.program?.flatMap((m) => m.topics) ?? [],
+    teaches: course.program?.flatMap((m) => m.topics) ?? course.objectives ?? [],
     provider: {
       '@type': 'EducationalOrganization',
       name: 'Dental Academy Vera',
       url: SITE_URL,
     },
-    offers: {
-      '@type': 'Offer',
-      price: course.price,
-      priceCurrency: 'EUR',
-      availability:
-        course.spots > 3
-          ? 'https://schema.org/InStock'
-          : 'https://schema.org/LimitedAvailability',
-      validFrom: new Date().toISOString().split('T')[0],
-      url: courseUrl,
-    },
+    ...(course.price != null && !past && {
+      offers: {
+        '@type': 'Offer',
+        price: course.price,
+        priceCurrency: 'EUR',
+        availability:
+          course.spots > 3
+            ? 'https://schema.org/InStock'
+            : 'https://schema.org/LimitedAvailability',
+        validFrom: new Date().toISOString().split('T')[0],
+        url: courseUrl,
+      },
+    }),
     hasCourseInstance: {
       '@type': 'CourseInstance',
       courseMode: course.modality === 'online' ? 'online' : 'onsite',
@@ -134,6 +143,7 @@ export default async function CoursePage({ params }: Props) {
 
   const LOGISTICS = [
     { icon: CalendarDays, label: 'Fecha',     value: course.date,       href: undefined },
+    ...(course.schedule ? [{ icon: Timer, label: 'Horario', value: course.schedule, href: undefined }] : []),
     { icon: Clock,        label: 'Duración',  value: course.duration,   href: undefined },
     { icon: MapPin,       label: 'Lugar',     value: course.location,   href: course.locationUrl },
     { icon: Users,        label: 'Plazas',    value: `Máximo ${course.spots}`, href: undefined },
@@ -193,6 +203,11 @@ export default async function CoursePage({ params }: Props) {
                   <span className="font-label text-[0.75rem] font-semibold tracking-[0.1em] uppercase text-teal">
                     {course.categoryLabel}
                   </span>
+                  {past && (
+                    <span className="bg-white/10 border border-white/25 text-white/80 font-label text-[0.72rem] font-bold tracking-[0.06em] uppercase px-3 py-[5px] rounded-full">
+                      Edición celebrada
+                    </span>
+                  )}
                   {course.includesPractice && (
                     <span className="bg-teal/20 border border-teal/40 text-teal font-label text-[0.72rem] font-bold tracking-[0.06em] uppercase px-3 py-[5px] rounded-full">
                       ✓ Incluye práctica
@@ -234,9 +249,25 @@ export default async function CoursePage({ params }: Props) {
         {/* ── Sticky CTA bar ──────────────────────────────────── */}
         <div className="sticky top-[72px] z-40 bg-white border-b border-gray-200 shadow-sm">
           <div className="max-w-[1200px] mx-auto px-6 py-[10px] flex items-center justify-between gap-4 flex-wrap">
+            {past ? (
+              <>
+                <span className="font-body text-[0.95rem] text-gray-600">
+                  Esta edición se celebró el {course.date}.
+                </span>
+                {nextCourse && (
+                  <Link
+                    href={`/cursos/${nextCourse.id}`}
+                    className="inline-flex items-center gap-2 px-5 py-[10px] rounded-[8px] bg-teal text-white font-body font-semibold text-[0.88rem] hover:bg-teal-dark transition-colors"
+                  >
+                    Ver próximo curso →
+                  </Link>
+                )}
+              </>
+            ) : (
+            <>
             <div className="flex items-baseline gap-2">
-              <span className="font-display text-[1.6rem] font-bold text-navy">
-                {course.price} €
+              <span className={`font-display font-bold text-navy ${course.price != null ? 'text-[1.6rem]' : 'text-[1.25rem]'}`}>
+                {priceLabel}
               </span>
             </div>
             <div className="flex gap-3">
@@ -257,14 +288,58 @@ export default async function CoursePage({ params }: Props) {
                 {CONTACT.phoneFormatted}
               </a>
             </div>
+            </>
+            )}
           </div>
         </div>
 
         {/* ── Body ────────────────────────────────────────────── */}
         <div className="max-w-[1200px] mx-auto px-6 py-16 grid grid-cols-1 lg:grid-cols-[1fr_360px] gap-12 items-start">
 
-          {/* LEFT: Program */}
+          {/* LEFT: Summary, objectives, program */}
           <div>
+            {course.summary && (
+              <section aria-labelledby="resumen-heading" className="mb-14">
+                <h2
+                  id="resumen-heading"
+                  className="font-display text-[1.95rem] font-bold text-navy mb-8 flex items-center gap-4"
+                >
+                  <span className="w-10 h-[3px] bg-teal flex-shrink-0" />
+                  Sobre el curso
+                </h2>
+                <p className="text-[1.08rem] text-gray-600 leading-[1.85] max-w-[720px]">
+                  {course.summary}
+                </p>
+              </section>
+            )}
+
+            {course.objectives && (
+              <section aria-labelledby="objetivos-heading" className="mb-14">
+                <h2
+                  id="objetivos-heading"
+                  className="font-display text-[1.95rem] font-bold text-navy mb-8 flex items-center gap-4"
+                >
+                  <span className="w-10 h-[3px] bg-teal flex-shrink-0" />
+                  Objetivos de aprendizaje
+                </h2>
+                <ul className="border border-gray-200 rounded-xl overflow-hidden">
+                  {course.objectives.map((objective, idx) => (
+                    <li
+                      key={objective}
+                      className={`flex items-start gap-4 p-5 md:px-7 ${idx !== 0 ? 'border-t border-gray-200' : ''} ${
+                        idx % 2 === 0 ? 'bg-white' : 'bg-off-white'
+                      }`}
+                    >
+                      <span className="w-7 h-7 rounded-full bg-teal-light flex items-center justify-center flex-shrink-0">
+                        <Check className="w-4 h-4 text-teal stroke-[2.5]" />
+                      </span>
+                      <span className="text-[1rem] text-gray-700 leading-[1.6] pt-[2px]">{objective}</span>
+                    </li>
+                  ))}
+                </ul>
+              </section>
+            )}
+
             {course.program && (
               <section aria-labelledby="programa-heading">
                 <h2
@@ -318,36 +393,23 @@ export default async function CoursePage({ params }: Props) {
             )}
 
             {/* Collaborator on mobile */}
-            <div className="mt-8 lg:hidden bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-              <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
-                Colabora
+            {course.collaborator && (
+              <div className="mt-8 lg:hidden">
+                <CollaboratorCard collaborator={course.collaborator} />
               </div>
-              <a
-                href="https://www.endogal.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                <Image
-                  src="/images/endogal.png"
-                  alt="Endogal"
-                  width={120}
-                  height={80}
-                  className="object-contain"
-                />
-              </a>
-            </div>
+            )}
           </div>
 
           {/* RIGHT: Sidebar (desktop) */}
           <aside className="hidden lg:block space-y-5">
             {/* Price card */}
+            {!past && (
             <div className="bg-white border border-gray-200 rounded-xl p-6 shadow-sm">
               <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-1">
                 Inversión
               </div>
-              <div className="font-display text-[2.6rem] font-bold text-navy leading-none mb-6">
-                {course.price} €
+              <div className={`font-display font-bold text-navy leading-none mb-6 ${course.price != null ? 'text-[2.6rem]' : 'text-[1.9rem]'}`}>
+                {priceLabel}
               </div>
 
               <div className="space-y-[10px]">
@@ -369,6 +431,7 @@ export default async function CoursePage({ params }: Props) {
                 </a>
               </div>
             </div>
+            )}
 
             {/* Logistics */}
             <div className="bg-off-white border border-gray-200 rounded-xl p-6">
@@ -402,7 +465,7 @@ export default async function CoursePage({ params }: Props) {
               {course.includes && course.includes.length > 0 && (
                 <div className="mt-5 pt-5 border-t border-gray-200">
                   <div className="font-label text-[0.72rem] font-semibold tracking-[0.12em] uppercase text-gray-400 mb-3">
-                    Incluido en el precio
+                    Incluye
                   </div>
                   <ul className="space-y-2">
                     {course.includes.map((item) => (
@@ -417,25 +480,7 @@ export default async function CoursePage({ params }: Props) {
             </div>
 
             {/* Collaborator */}
-            <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
-              <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
-                Colabora
-              </div>
-              <a
-                href="https://www.endogal.com"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
-              >
-                <Image
-                  src="/images/endogal.png"
-                  alt="Endogal"
-                  width={120}
-                  height={80}
-                  className="object-contain"
-                />
-              </a>
-            </div>
+            {course.collaborator && <CollaboratorCard collaborator={course.collaborator} />}
 
             {/* Professor sidebar */}
             {professor && <ProfessorCard professor={professor} />}
@@ -448,11 +493,12 @@ export default async function CoursePage({ params }: Props) {
         <div className="absolute inset-0 cta-radial-overlay pointer-events-none" />
         <div className="relative z-10 max-w-[700px] mx-auto px-6">
           <h2 className="font-display text-[clamp(1.7rem,3vw,2.4rem)] font-bold mb-4">
-            ¿Listo para inscribirte?
+            {past ? '¿Te interesa la próxima edición?' : '¿Listo para inscribirte?'}
           </h2>
           <p className="text-[1.05rem] opacity-72 mb-10 leading-[1.7]">
-            Plazas limitadas — {course.spots} asistentes máximo para garantizar la calidad de la
-            formación.
+            {past
+              ? 'Escríbenos y te avisamos cuando abramos nuevas fechas.'
+              : `Plazas limitadas — ${course.spots} asistentes máximo para garantizar la calidad de la formación.`}
           </p>
           <div className="flex gap-4 justify-center flex-wrap">
             <a
@@ -475,6 +521,31 @@ export default async function CoursePage({ params }: Props) {
         </div>
       </section>
     </>
+  )
+}
+
+// ── Collaborator card sub-component ──────────────────────────────────────────
+function CollaboratorCard({ collaborator }: { collaborator: Collaborator }) {
+  return (
+    <div className="bg-white border border-gray-200 rounded-xl p-5 shadow-sm">
+      <div className="font-label text-[0.72rem] font-semibold tracking-[0.1em] uppercase text-gray-400 mb-4">
+        Colabora
+      </div>
+      <a
+        href={collaborator.url}
+        target="_blank"
+        rel="noopener noreferrer"
+        className="flex items-center justify-center py-3 px-4 rounded-lg bg-gray-50 hover:bg-gray-100 transition-colors"
+      >
+        <Image
+          src={collaborator.logoUrl}
+          alt={collaborator.name}
+          width={120}
+          height={80}
+          className="object-contain"
+        />
+      </a>
+    </div>
   )
 }
 
@@ -506,9 +577,11 @@ function ProfessorCard({
           {professor.name}
         </h3>
         <div className="font-label text-[0.74rem] text-teal uppercase tracking-[0.04em] font-semibold mb-4">
-          {professor.specialty}
+          {professor.tagline ?? professor.specialty}
         </div>
-        <p className="text-[0.88rem] text-gray-500 leading-[1.6] mb-5">{professor.bio}</p>
+        {professor.bio && (
+          <p className="text-[0.88rem] text-gray-500 leading-[1.6] mb-5">{professor.bio}</p>
+        )}
 
         {professor.credentialGroups?.map((group) => (
           <div key={group.label} className="mb-4">

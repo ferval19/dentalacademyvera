@@ -1,9 +1,11 @@
 import Image from 'next/image'
 import AnimateOnScroll from './AnimateOnScroll'
 import { professors } from '@/lib/data/professors'
+import { getNextCourse } from '@/lib/data/courses'
 
 export default function Professors() {
-  const professor = professors[0]
+  const course = getNextCourse()
+  const professor = professors.find((p) => p.id === course?.professorId)
   if (!professor) return null
 
   return (
@@ -26,7 +28,7 @@ export default function Professors() {
 
           {/* Left: Photo */}
           <AnimateOnScroll>
-            <div className="relative min-h-[440px] lg:min-h-[600px] bg-[#f0eeea] overflow-hidden">
+            <div className={`relative ${professor.imageUrl ? 'min-h-[440px] lg:min-h-[600px]' : 'min-h-[280px] lg:min-h-[420px]'} bg-[#f0eeea] overflow-hidden h-full`}>
               {professor.imageUrl ? (
                 <>
                   <Image
@@ -40,14 +42,14 @@ export default function Professors() {
                   <div className="absolute inset-0 bg-gradient-to-b from-transparent via-transparent to-[#f0eeea]/60 lg:hidden pointer-events-none" />
                 </>
               ) : (
-                <div className="w-full h-full flex items-center justify-center">
+                <div className="absolute inset-0 flex items-center justify-center pb-16 lg:pb-0">
                   <div className="font-label text-[4rem] text-teal font-bold">{professor.initials}</div>
                 </div>
               )}
 
               {/* Name overlay at bottom of image (mobile) */}
               <div className="absolute bottom-0 left-0 right-0 p-7 lg:hidden">
-                <div className="font-display text-[1.6rem] font-bold text-white leading-tight">
+                <div className={`font-display text-[1.6rem] font-bold leading-tight ${professor.imageUrl ? 'text-white' : 'text-navy'}`}>
                   {professor.name}
                 </div>
                 <div className="font-label text-[0.85rem] text-teal uppercase tracking-[0.06em] font-semibold mt-1">
@@ -64,7 +66,7 @@ export default function Professors() {
               {/* Name (desktop) */}
               <div className="hidden lg:block mb-7">
                 <div className="font-label text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-teal mb-2">
-                  Endodoncia · KOL Endogal
+                  {professor.tagline ?? professor.specialty}
                 </div>
                 <h3 className="font-display text-[clamp(1.9rem,2.5vw,2.7rem)] font-bold text-navy leading-[1.1] mb-4">
                   {professor.name}
@@ -73,9 +75,11 @@ export default function Professors() {
               </div>
 
               {/* Bio */}
-              <p className="text-[1.05rem] text-gray-600 leading-[1.8] mb-9">
-                {professor.bio}
-              </p>
+              {professor.bio && (
+                <p className="text-[1.05rem] text-gray-600 leading-[1.8] mb-9">
+                  {professor.bio}
+                </p>
+              )}
 
               {/* Credential groups */}
               <div className="space-y-8">
