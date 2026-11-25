@@ -1,7 +1,8 @@
 #!/usr/bin/env node
 /**
- * Genera las imágenes para compartir (WhatsApp, LinkedIn, Facebook…) de cada
- * curso como JPG estáticos, a partir de la plantilla app/cursos/[id]/opengraph-image.tsx.
+ * Genera las imágenes para compartir (WhatsApp, LinkedIn, Facebook…) como JPG
+ * estáticos: la general (app/og/home/route.tsx → public/og-image.jpg) y la de
+ * cada curso (app/cursos/[id]/opengraph-image.tsx → ogImage del curso).
  *
  * Por qué JPG estático: WhatsApp no muestra bien las imágenes servidas por una
  * función edge ni las PNG pesadas (límite práctico ~300 KB).
@@ -29,13 +30,19 @@ const courses = blocks.map((b) => ({
   ogImage: b.match(/\n\s{4}ogImage: '([^']+)'/)?.[1],
 }))
 
+// Imagen general (portada, /cursos, /profesores) + una por curso
+const jobs = [
+  { label: 'general', url: `${base}/og/home`, out: '/og-image.jpg' },
+  ...courses.map(({ id, ogImage }) => ({ label: id, url: `${base}/cursos/${id}/opengraph-image`, out: ogImage })),
+]
+
 let failed = false
-for (const { id, ogImage } of courses) {
+for (const { label: id, url, out: ogImage } of jobs) {
   if (!ogImage) {
     console.warn(`⚠ ${id}: sin ogImage en courses.ts, se usará la imagen dinámica`)
     continue
   }
-  const res = await fetch(`${base}/cursos/${id}/opengraph-image`)
+  const res = await fetch(url)
   if (!res.ok) {
     console.error(`✗ ${id}: ${res.status} al pedir la imagen (¿está arrancado el servidor en ${base}?)`)
     failed = true

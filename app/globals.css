@@ -7,6 +7,12 @@
     scroll-behavior: smooth;
     font-size: 17px;
   }
+  /* Foco visible para teclado en toda la web (no aparece con ratón) */
+  :focus-visible {
+    outline: 2px solid #168373;
+    outline-offset: 3px;
+    border-radius: 6px;
+  }
   body {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;

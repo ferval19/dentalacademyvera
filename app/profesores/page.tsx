@@ -1,12 +1,12 @@
 import type { Metadata } from 'next'
 import Image from 'next/image'
 import Link from 'next/link'
-import { ArrowRight } from 'lucide-react'
 import Nav from '@/components/Nav'
 import PageHeader from '@/components/PageHeader'
 import CTA from '@/components/CTA'
 import Footer from '@/components/Footer'
 import AnimateOnScroll from '@/components/AnimateOnScroll'
+import { ChevronLink } from '@/components/ui'
 import { professors } from '@/lib/data/professors'
 import { getCoursesByProfessor, isPastCourse, formatShortDate } from '@/lib/data/courses'
 import { SITE_URL, pageMetadata } from '@/lib/site'
@@ -62,118 +62,109 @@ export default function ProfessorsPage() {
       <main className="pt-[72px]">
         <PageHeader
           eyebrow="Profesorado"
-          title="Quién enseña en Vera"
-          lead="Clínicos en activo que dedican una jornada a compartir cómo trabajan. Estos son los ponentes que han formado parte de Dental Academy Vera."
+          title="Quién enseña en Vera."
+          lead="Clínicos en activo que dedican una jornada a compartir cómo trabajan."
           crumbs={[{ label: 'Inicio', href: '/' }, { label: 'Profesorado' }]}
-          stats={[{ label: 'Ponentes', value: roster.length }]}
+          stats={[{ label: roster.length === 1 ? 'ponente' : 'ponentes', value: roster.length }]}
         />
 
-        <div className="bg-off-white py-20">
-          <div className="max-w-[1200px] mx-auto px-6 space-y-10">
-            {roster.map(({ professor, taught, hasUpcoming }) => (
-              <AnimateOnScroll key={professor.id}>
-                <article
-                  id={professor.id}
-                  aria-labelledby={`${professor.id}-name`}
-                  className="scroll-mt-[96px] grid grid-cols-1 lg:grid-cols-[360px_1fr] bg-white rounded-xl border border-gray-200 overflow-hidden shadow-md"
-                >
-                  {/* Foto */}
-                  <div className="relative aspect-[4/5] lg:aspect-auto lg:min-h-[480px] bg-[#f0eeea]">
+        {roster.map(({ professor, taught, hasUpcoming }, i) => {
+          const dark = i === 0 && hasUpcoming
+          return (
+            <section
+              key={professor.id}
+              id={professor.id}
+              aria-labelledby={`${professor.id}-name`}
+              className={`scroll-mt-[72px] px-6 py-24 md:py-28 ${dark ? 'bg-black text-white' : i % 2 ? 'bg-white text-ink' : 'bg-surface text-ink'}`}
+            >
+              <div className="max-w-[1080px] mx-auto grid grid-cols-1 md:grid-cols-[minmax(0,5fr)_minmax(0,6fr)] gap-12 md:gap-16 items-start">
+                <AnimateOnScroll>
+                  <div className={`relative aspect-[4/5] rounded-[28px] overflow-hidden ${dark ? 'bg-[#1d1d1f]' : 'bg-surface ring-1 ring-black/[0.08]'}`}>
                     {professor.imageUrl ? (
                       <Image
                         src={professor.imageUrl}
                         alt={professor.name}
                         fill
-                        sizes="(max-width: 1024px) 100vw, 360px"
-                        className={`object-cover object-top ${hasUpcoming ? '' : 'grayscale-[35%]'}`}
+                        sizes="(max-width: 768px) 100vw, 460px"
+                        className="object-cover object-top"
                       />
                     ) : (
-                      <span className="absolute inset-0 flex items-center justify-center font-label text-[3.5rem] font-bold text-teal">
+                      <span className="absolute inset-0 flex items-center justify-center text-[5rem] font-semibold text-teal-deep/40">
                         {professor.initials}
                       </span>
                     )}
-                    {hasUpcoming && (
-                      <span className="absolute top-5 left-5 bg-teal text-white font-label text-[0.7rem] font-bold uppercase tracking-[0.08em] px-3 py-[6px] rounded-full">
-                        Próximo curso
-                      </span>
-                    )}
                   </div>
+                </AnimateOnScroll>
 
-                  {/* Perfil */}
-                  <div className="p-8 md:p-12">
-                    <div className="font-label text-[0.75rem] font-semibold tracking-[0.12em] uppercase text-teal mb-2">
-                      {professor.tagline ?? professor.specialty}
-                    </div>
-                    <h2 id={`${professor.id}-name`} className="font-display text-[clamp(1.8rem,3vw,2.4rem)] font-bold text-navy leading-[1.1] mb-4">
-                      {professor.name}
-                    </h2>
-                    <div className="w-12 h-[3px] bg-teal mb-6" />
+                <AnimateOnScroll delay={100}>
+                  <p className={`text-[17px] font-semibold mb-3 ${dark ? 'text-[#5fd3bf]' : 'text-teal-deep'}`}>
+                    {hasUpcoming ? 'Imparte el próximo curso' : professor.specialty}
+                  </p>
+                  <h2
+                    id={`${professor.id}-name`}
+                    className="text-balance text-[clamp(2.2rem,4.6vw,3.5rem)] font-semibold tracking-[-0.03em] leading-[1.05]"
+                  >
+                    {professor.name}
+                  </h2>
+                  {professor.tagline && (
+                    <p className={`mt-3 text-[19px] ${dark ? 'text-white/60' : 'text-ink-2'}`}>{professor.tagline}</p>
+                  )}
+                  {professor.bio && (
+                    <p className={`mt-8 text-[clamp(1.1rem,1.6vw,1.3rem)] leading-[1.55] ${dark ? 'text-white/80' : 'text-[#424245]'}`}>
+                      {professor.bio}
+                    </p>
+                  )}
 
-                    {professor.bio && (
-                      <p className="text-[1.03rem] text-gray-600 leading-[1.8] mb-8 max-w-[640px]">{professor.bio}</p>
-                    )}
-
-                    {professor.credentialGroups && (
-                      <div className="grid grid-cols-1 md:grid-cols-2 gap-8 mb-10">
-                        {professor.credentialGroups.map((group) => (
-                          <div key={group.label}>
-                            <h3 className="font-label text-[0.72rem] font-semibold tracking-[0.12em] uppercase text-gray-400 mb-3">
-                              {group.label}
-                            </h3>
-                            <ul className="space-y-2">
-                              {group.items.map((item) => (
-                                <li key={item} className="flex gap-3 items-start text-[0.9rem] text-gray-600 leading-[1.5]">
-                                  <span className="w-[5px] h-[5px] rounded-full bg-teal flex-shrink-0 mt-[8px]" />
-                                  <span>{item}</span>
-                                </li>
-                              ))}
-                            </ul>
-                          </div>
+                  {professor.credentialGroups?.map((group) => (
+                    <div key={group.label} className="mt-10">
+                      <h3 className={`text-[14px] font-semibold mb-1 ${dark ? 'text-white/60' : 'text-ink-2'}`}>{group.label}</h3>
+                      <ul className={`border-t ${dark ? 'border-white/15' : 'border-black/[0.1]'}`}>
+                        {group.items.map((item) => (
+                          <li
+                            key={item}
+                            className={`py-3 border-b text-[15px] leading-snug ${dark ? 'border-white/15 text-white/75' : 'border-black/[0.1] text-[#424245]'}`}
+                          >
+                            {item}
+                          </li>
                         ))}
-                      </div>
-                    )}
-
-                    {/* Cursos impartidos */}
-                    <div className="border-t border-gray-200 pt-6">
-                      <h3 className="font-label text-[0.72rem] font-semibold tracking-[0.12em] uppercase text-gray-400 mb-4">
-                        En Dental Academy Vera
-                      </h3>
-                      <ul className="space-y-3">
-                        {taught.map((course) => {
-                          const past = isPastCourse(course)
-                          return (
-                            <li key={course.id}>
-                              <Link
-                                href={`/cursos/${course.id}`}
-                                className="group flex flex-wrap items-center gap-x-4 gap-y-1 rounded-lg -mx-3 px-3 py-2 hover:bg-off-white transition-colors"
-                              >
-                                <span
-                                  className={`font-label text-[0.66rem] font-bold uppercase tracking-[0.08em] px-[9px] py-[3px] rounded-full ${
-                                    past ? 'bg-gray-100 text-gray-500' : 'bg-teal text-white'
-                                  }`}
-                                >
-                                  {past ? 'Celebrado' : 'Próximo'}
-                                </span>
-                                <span className="font-label text-[0.78rem] uppercase tracking-[0.1em] text-gray-400">
-                                  {formatShortDate(course)} {course.dateISO?.slice(0, 4)}
-                                </span>
-                                <span className="font-display text-[1.05rem] font-semibold text-navy group-hover:text-teal transition-colors">
-                                  {course.title}
-                                </span>
-                                <ArrowRight className="w-4 h-4 text-teal opacity-0 group-hover:opacity-100 transition-opacity" />
-                              </Link>
-                            </li>
-                          )
-                        })}
                       </ul>
                     </div>
+                  ))}
+
+                  <div className="mt-10">
+                    <h3 className={`text-[14px] font-semibold mb-3 ${dark ? 'text-white/60' : 'text-ink-2'}`}>En Dental Academy Vera</h3>
+                    <ul className="space-y-3">
+                      {taught.map((course) => {
+                        const past = isPastCourse(course)
+                        return (
+                          <li key={course.id}>
+                            <Link
+                              href={`/cursos/${course.id}`}
+                              className={`group flex flex-wrap items-baseline gap-x-3 gap-y-1 rounded-[18px] px-5 py-4 transition-colors ${
+                                dark ? 'bg-[#1d1d1f] hover:bg-[#2a2a2c]' : 'bg-white hover:bg-white/70'
+                              }`}
+                            >
+                              <span className={`text-[13px] font-semibold ${past ? (dark ? 'text-white/50' : 'text-ink-2') : dark ? 'text-[#5fd3bf]' : 'text-teal-deep'}`}>
+                                {past ? 'Celebrado' : 'Próximo'} · {formatShortDate(course)} {course.dateISO?.slice(0, 4)}
+                              </span>
+                              <span className="text-[17px] font-semibold group-hover:underline underline-offset-4">{course.title}</span>
+                            </Link>
+                          </li>
+                        )
+                      })}
+                    </ul>
                   </div>
-                </article>
-              </AnimateOnScroll>
-            ))}
+                </AnimateOnScroll>
+              </div>
+            </section>
+          )
+        })}
+
+        <div className="bg-white px-6 pt-16">
+          <div className="max-w-[1080px] mx-auto">
+            <ChevronLink href="/cursos">Ver todos los cursos</ChevronLink>
           </div>
         </div>
-
         <CTA />
       </main>
       <Footer />

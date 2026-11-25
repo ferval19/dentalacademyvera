@@ -20,6 +20,10 @@ const config: Config = {
           50: '#F0FAF8',
         },
         mint: '#A8E6D8',
+        // Ficha de curso (estilo Apple)
+        ink: { DEFAULT: '#1d1d1f', 2: '#6e6e73' },
+        surface: '#f5f5f7',
+        'teal-deep': { DEFAULT: '#168373', hover: '#11705f' }, // ≥4.5:1 con texto blanco
         'off-white': '#F5F8FA',
         gray: {
           100: '#F1F3F5',
@@ -33,9 +37,12 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['var(--font-playfair)', 'Georgia', 'serif'],
-        body: ['var(--font-dm-sans)', '-apple-system', 'sans-serif'],
-        label: ['var(--font-outfit)', '-apple-system', 'sans-serif'],
+        // Toda la web usa la tipografía del sistema de Apple (San Francisco en
+        // Mac/iOS) con DM Sans como respaldo en el resto de plataformas.
+        apple: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"SF Pro Text"', '"Helvetica Neue"', 'var(--font-dm-sans)', 'sans-serif'],
+        display: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Display"', '"Helvetica Neue"', 'var(--font-dm-sans)', 'sans-serif'],
+        body: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Helvetica Neue"', 'var(--font-dm-sans)', 'sans-serif'],
+        label: ['-apple-system', 'BlinkMacSystemFont', '"SF Pro Text"', '"Helvetica Neue"', 'var(--font-dm-sans)', 'sans-serif'],
       },
       boxShadow: {
         sm: '0 1px 3px rgba(45,62,80,0.06)',

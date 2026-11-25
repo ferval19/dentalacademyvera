@@ -1,29 +1,22 @@
-import type { Metadata } from 'next'
-import { Playfair_Display, DM_Sans, Outfit } from 'next/font/google'
+import type { Metadata, Viewport } from 'next'
+import { DM_Sans } from 'next/font/google'
 import { CONTACT } from '@/lib/contact'
 import './globals.css'
 
-const playfair = Playfair_Display({
-  subsets: ['latin'],
-  weight: ['400', '600', '700'],
-  style: ['normal', 'italic'],
-  variable: '--font-playfair',
-  display: 'swap',
-})
 const dmSans = DM_Sans({
   subsets: ['latin'],
   weight: ['300', '400', '500', '600', '700'],
   variable: '--font-dm-sans',
   display: 'swap',
 })
-const outfit = Outfit({
-  subsets: ['latin'],
-  weight: ['300', '400', '500', '600', '700'],
-  variable: '--font-outfit',
-  display: 'swap',
-})
 
 import { SITE_URL, SITE_NAME, DEFAULT_OG_IMAGE } from '@/lib/site'
+
+export const viewport: Viewport = {
+  width: 'device-width',
+  initialScale: 1,
+  themeColor: '#ffffff',
+}
 
 export const metadata: Metadata = {
   metadataBase: new URL(SITE_URL),
@@ -110,7 +103,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html
       lang="es"
-      className={`${playfair.variable} ${dmSans.variable} ${outfit.variable}`}
+      className={dmSans.variable}
     >
       <head>
         <script
@@ -118,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           dangerouslySetInnerHTML={{ __html: JSON.stringify(organizationJsonLd) }}
         />
       </head>
-      <body className="font-body text-gray-600 bg-white leading-[1.7]">
+      <body className="font-apple text-ink bg-white leading-[1.5] antialiased">
         {children}
       </body>
     </html>

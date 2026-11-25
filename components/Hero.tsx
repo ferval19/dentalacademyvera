@@ -1,129 +1,89 @@
 import Image from 'next/image'
-import { Clock, Users, CalendarCheck, CalendarDays } from 'lucide-react'
 import { professors } from '@/lib/data/professors'
-import { getNextCourse, formatLongDate, formatShortDate, splitTitle } from '@/lib/data/courses'
+import { getNextCourse, formatLongDate, formatShortDate } from '@/lib/data/courses'
+import { whatsappCourse, CONTACT } from '@/lib/contact'
+import { Title, PillLink, ChevronLink } from './ui'
 
+/** Portada: el próximo curso como "producto" protagonista. */
 export default function Hero() {
   const course = getNextCourse()
-  const professor = course?.professorId
-    ? professors.find((p) => p.id === course.professorId)
-    : undefined
-  const [titleA, titleB] = course ? splitTitle(course.title) : ['Formación dental', 'de excelencia']
+  const professor = course?.professorId ? professors.find((p) => p.id === course.professorId) : undefined
 
-  const STATS = course
-    ? [
-        { number: course.duration.replace(/\s*horas?$/, 'h'), label: 'Formación intensiva', icon: Clock },
-        { number: String(course.spots), label: 'Plazas limitadas', icon: Users },
-        { number: '1', label: 'Jornada completa', icon: CalendarCheck },
-        { number: formatShortDate(course), label: 'Próxima edición', icon: CalendarDays },
-      ]
-    : []
+  if (!course) {
+    return (
+      <section className="bg-white px-6 pt-[160px] pb-28 text-center">
+        <p className="text-[17px] md:text-[21px] font-semibold text-teal-deep mb-3">Dental Academy Vera</p>
+        <Title as="h1" className="mx-auto max-w-[16ch] text-ink">Formación dental en Vera.</Title>
+        <p className="mt-5 text-[clamp(1.35rem,2.6vw,1.9rem)] font-medium text-ink-2">
+          Estamos preparando las próximas fechas.
+        </p>
+        <div className="mt-10 flex justify-center">
+          <PillLink href={CONTACT.whatsappGeneral} external>Avisadme por WhatsApp</PillLink>
+        </div>
+      </section>
+    )
+  }
 
   return (
-    <section className="relative min-h-screen flex items-center bg-hero-gradient overflow-hidden pt-[72px]">
-      <div className="absolute inset-0 hero-radial-overlay pointer-events-none" />
-      <div className="absolute inset-0 hero-grid-pattern opacity-[0.025] pointer-events-none" />
-
-      <div className="relative z-10 max-w-[1200px] mx-auto px-6 py-20 grid grid-cols-1 lg:grid-cols-2 gap-[60px] items-center w-full">
-
-        {/* ── Text column ─────────────────────────────────── */}
-        <div className="text-white text-center lg:text-left">
-          <div className="inline-flex items-center gap-2 bg-teal/[0.12] border border-teal/[0.25] px-4 py-[9px] rounded-full font-label text-[0.82rem] font-medium tracking-[0.06em] uppercase mb-8 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.1s_both]">
-            <span className="w-[6px] h-[6px] bg-teal rounded-full animate-blink flex-shrink-0" />
-            Vera, Almería{course ? ` · ${formatLongDate(course)}` : ''}
-          </div>
-
-          <h1 className="font-display text-[clamp(2.6rem,5vw,4rem)] font-bold leading-[1.12] mb-6 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.2s_both]">
-            {titleA}
-            {titleB && (
-              <>
-                <br />
-                <em className="italic text-teal">{titleB}</em>
-              </>
-            )}
-          </h1>
-
-          <p className="text-[1.15rem] leading-[1.78] opacity-[0.82] max-w-[500px] mb-10 animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.35s_both] mx-auto lg:mx-0">
-            {course
-              ? <>{course.subtitle ? `${course.subtitle}. ` : ''}Una jornada intensiva{professor ? ` con el ${professor.name}` : ''}.</>
-              : 'Pronto anunciaremos las próximas fechas. Escríbenos y te avisamos.'}
+    <section className="bg-white px-6 pt-[136px] md:pt-[160px] pb-20 md:pb-28">
+      <div className="text-center">
+        <p className="text-[17px] md:text-[21px] font-semibold text-teal-deep mb-3">
+          Próximo curso · {formatLongDate(course)}
+        </p>
+        <Title as="h1" className="mx-auto max-w-[17ch] text-ink">{course.title}</Title>
+        {course.subtitle && (
+          <p className="mt-5 text-[clamp(1.35rem,2.6vw,1.9rem)] font-medium text-ink-2 tracking-[-0.015em]">
+            {course.subtitle}
           </p>
-
-          <div className="flex gap-4 flex-wrap justify-center lg:justify-start animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.5s_both]">
-            <a
-              href="#cursos"
-              className="inline-flex items-center gap-2 px-8 py-[15px] rounded-[10px] font-body font-semibold text-[1rem] bg-teal text-white hover:bg-teal-dark hover:-translate-y-[2px] hover:shadow-[0_8px_30px_rgba(43,181,160,0.4)] transition-all duration-300 ease-[cubic-bezier(0.22,1,0.36,1)]"
-            >
-              Ver programa →
-            </a>
-            <a
-              href="#contacto"
-              className="inline-flex items-center gap-2 px-8 py-[15px] rounded-[10px] font-body font-semibold text-[1rem] bg-transparent text-white border border-white/30 hover:border-white/55 hover:bg-white/[0.07] transition-all duration-300"
-            >
-              Reservar plaza
-            </a>
-          </div>
+        )}
+        <div className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4 sm:gap-8">
+          <PillLink href={whatsappCourse(course.title)} external>Reservar plaza</PillLink>
+          <ChevronLink href={`/cursos/${course.id}`}>Ver el curso</ChevronLink>
         </div>
+      </div>
 
-        {/* ── Stats card ──────────────────────────────────── */}
-        {course && (
-        <div className="animate-[fadeInUp_0.8s_cubic-bezier(0.22,1,0.36,1)_0.4s_both] max-w-[480px] mx-auto lg:mx-0 w-full">
-          <div className="bg-white/[0.06] border border-white/10 rounded-xl p-10 backdrop-blur-xl">
-            <div className="grid grid-cols-2 gap-6">
-              {STATS.map((stat) => {
-                const Icon = stat.icon
-                return (
-                  <div key={stat.label} className="text-white">
-                    <div className="flex items-center gap-2 mb-1">
-                      <Icon className="w-4 h-4 text-teal/70 stroke-[1.5]" />
-                      <div className="font-label text-[0.8rem] opacity-[0.6] tracking-[0.03em]">
-                        {stat.label}
-                      </div>
-                    </div>
-                    <div className="font-display text-[2.6rem] font-bold text-teal leading-none pl-6">
-                      {stat.number}
-                    </div>
-                  </div>
-                )
-              })}
-            </div>
-
-            {professor && (
-            <div className="mt-8 pt-6 border-t border-white/10 text-white">
-              <div className="flex items-center gap-3 mb-3">
-                <div className="w-10 h-10 rounded-full overflow-hidden flex-shrink-0 border border-white/20">
-                  {professor.avatarUrl ? (
-                    <Image
-                      src={professor.avatarUrl}
-                      alt={professor.name}
-                      width={40}
-                      height={40}
-                      className="w-full h-full object-cover"
-                    />
-                  ) : (
-                    <div className="w-full h-full bg-white/10 flex items-center justify-center font-label text-[0.8rem] text-teal font-bold">
-                      {professor.initials}
-                    </div>
-                  )}
+      {/* Tarjeta del ponente: la "imagen de producto" del curso */}
+      {professor && (
+        <div className="mt-16 md:mt-20 max-w-[1080px] mx-auto rounded-[32px] bg-black text-white overflow-hidden grid grid-cols-1 md:grid-cols-2">
+          <div className="p-10 md:p-14 flex flex-col justify-end order-2 md:order-1">
+            {course.quote && (
+              <p className="text-balance text-[clamp(1.5rem,2.6vw,2.1rem)] font-semibold leading-[1.18] tracking-[-0.02em] mb-10">
+                &ldquo;{course.quote}&rdquo;
+              </p>
+            )}
+            <p className="text-[17px] font-semibold">{professor.name}</p>
+            <p className="text-[15px] text-white/60">{professor.tagline ?? professor.specialty}</p>
+            <dl className="mt-10 grid grid-cols-3 gap-4 border-t border-white/15 pt-6">
+              {[
+                { label: 'Fecha', value: formatShortDate(course) },
+                { label: 'Duración', value: course.duration.replace(/\s*horas?$/, ' h') },
+                { label: 'Plazas', value: String(course.spots) },
+              ].map((f) => (
+                <div key={f.label}>
+                  <dt className="text-[12px] text-white/50">{f.label}</dt>
+                  <dd className="tabular-nums text-[clamp(1.4rem,2.4vw,1.9rem)] font-semibold tracking-[-0.02em]">{f.value}</dd>
                 </div>
-                <div>
-                  <div className="font-display text-[0.98rem] font-semibold">{professor.name}</div>
-                  <div className="font-label text-[0.74rem] text-teal opacity-90 uppercase tracking-[0.04em]">
-                    {professor.tagline ?? professor.specialty}
-                  </div>
-                </div>
-              </div>
-              {course.quote && (
-                <p className="font-display italic text-[0.97rem] opacity-[0.72] leading-relaxed pl-[52px]">
-                  &ldquo;{course.quote}&rdquo;
-                </p>
-              )}
-            </div>
+              ))}
+            </dl>
+          </div>
+          <div className="relative min-h-[380px] md:min-h-[560px] order-1 md:order-2 bg-[#1d1d1f]">
+            {professor.imageUrl ? (
+              <Image
+                src={professor.imageUrl}
+                alt={professor.name}
+                fill
+                priority
+                sizes="(max-width: 768px) 100vw, 540px"
+                className="object-cover object-top"
+              />
+            ) : (
+              <span className="absolute inset-0 flex items-center justify-center text-[5rem] font-semibold text-white/30">
+                {professor.initials}
+              </span>
             )}
           </div>
         </div>
-        )}
-      </div>
+      )}
     </section>
   )
 }

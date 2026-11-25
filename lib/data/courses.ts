@@ -82,11 +82,11 @@ export const courses: Course[] = [
     modality: 'presencial',
     date: '5 Feb 2027',
     dateISO: '2027-02-05',
-    duration: '8,5 horas',
+    duration: '9 horas',
     schedule: '9:30–14:00 y 16:00–20:00',
     location: 'The Work Club Vera',
     locationUrl: 'https://theworkclub.es',
-    // price: pendiente de confirmar → se muestra "Consultar precio"
+    price: 300,
     spots: 20,
     emoji: '🦷',
     gradient: 'linear-gradient(135deg, #1E2D3D, #2E5560)',

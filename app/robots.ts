@@ -4,7 +4,7 @@ import { SITE_URL as BASE } from '@/lib/site'
 
 export default function robots(): MetadataRoute.Robots {
   return {
-    rules: { userAgent: '*', allow: '/' },
+    rules: { userAgent: '*', allow: '/', disallow: '/og/' },
     sitemap: `${BASE}/sitemap.xml`,
     host: BASE,
   }

@@ -26,6 +26,13 @@ export default function AnimateOnScroll({ children, className = '', delay = 0 }:
       el.style.transform = 'translateY(0)'
     }
 
+    // Sin animación para quien pide movimiento reducido
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      el.style.transition = 'none'
+      show()
+      return
+    }
+
     // Safety fallback: always visible after 1s regardless of observer
     const fallback = setTimeout(show, 1000 + delay)
 

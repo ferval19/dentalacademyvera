@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState } from 'react'
 import Image from 'next/image'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
@@ -13,59 +13,45 @@ const NAV_LINKS: { label: string; page?: string; anchor?: string }[] = [
 ]
 
 export default function Nav() {
-  const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const pathname = usePathname()
 
-  // On the homepage use bare hash links (smooth scroll, no navigation).
-  // On any other page prefix with / so Next.js navigates home first.
-  const href = (anchor: string) =>
-    pathname === '/' ? `#${anchor}` : `/#${anchor}`
+  // En la portada, anclas directas; en otras páginas, volver a la portada primero
+  const href = (anchor: string) => (pathname === '/' ? `#${anchor}` : `/#${anchor}`)
   const linkHref = (link: (typeof NAV_LINKS)[number]) => link.page ?? href(link.anchor!)
   // /cursos/[id] cuenta como sección "Cursos"
   const isActive = (link: (typeof NAV_LINKS)[number]) =>
     !!link.page && (pathname === link.page || pathname.startsWith(`${link.page}/`))
 
-  useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
-  }, [])
-
   const closeMenu = () => setMenuOpen(false)
 
   return (
-    <nav
-      className={`fixed top-0 left-0 right-0 z-[100] bg-white/[0.94] backdrop-blur-xl border-b border-navy/[0.06] transition-all duration-[400ms] ease-[cubic-bezier(0.22,1,0.36,1)] ${
-        scrolled ? 'shadow-md' : ''
-      }`}
-    >
-      <div className="flex items-center justify-between max-w-[1200px] mx-auto px-6 h-[72px]">
+    <nav className="fixed top-0 left-0 right-0 z-[100] bg-white/80 backdrop-blur-xl backdrop-saturate-150 border-b border-black/[0.08]">
+      <div className="flex items-center justify-between max-w-[1080px] mx-auto px-6 h-[72px]">
         {/* Logo */}
-        <Link href="/" className="flex items-center gap-[10px]">
+        <Link href="/" className="flex items-center gap-[10px]" onClick={closeMenu}>
           <Image
             src="/images/logo-icon.png"
             alt=""
-            width={38}
-            height={38}
-            className="h-[38px] w-auto object-contain flex-shrink-0"
+            width={34}
+            height={34}
+            className="h-[34px] w-auto object-contain flex-shrink-0"
             priority
           />
-          <div className="font-label font-semibold text-[1.1rem] tracking-[0.08em] uppercase text-navy leading-[1.15]">
-            Dental Academy{' '}
-            <span className="text-teal block font-medium">Vera</span>
-          </div>
+          <span className="text-[17px] font-semibold tracking-[-0.01em] text-ink leading-[1.1]">
+            Dental Academy <span className="text-teal-deep">Vera</span>
+          </span>
         </Link>
 
-        {/* Desktop links */}
+        {/* Enlaces (escritorio) */}
         <div className="hidden md:flex items-center gap-8">
           {NAV_LINKS.map((link) => (
             <Link
               key={link.label}
               href={linkHref(link)}
               aria-current={isActive(link) ? 'page' : undefined}
-              className={`nav-link font-body text-[0.95rem] font-medium hover:text-navy transition-colors duration-300 ${
-                isActive(link) ? 'text-navy' : 'text-gray-500'
+              className={`text-[14px] transition-colors ${
+                isActive(link) ? 'text-ink font-medium' : 'text-ink/70 hover:text-ink'
               }`}
             >
               {link.label}
@@ -73,56 +59,52 @@ export default function Nav() {
           ))}
           <Link
             href={href('contacto')}
-            className="bg-teal text-white px-6 py-[10px] rounded-[8px] font-semibold text-[0.9rem] tracking-[0.02em] hover:bg-teal-dark hover:-translate-y-px hover:shadow-[0_4px_16px_rgba(43,181,160,0.3)] transition-all duration-300"
+            className="rounded-full bg-teal-deep hover:bg-teal-deep-hover text-white text-[14px] font-medium px-4 py-[7px] transition-colors"
           >
             Contactar
           </Link>
         </div>
 
-        {/* Hamburger */}
+        {/* Menú móvil */}
         <button
-          className="md:hidden p-2 cursor-pointer bg-transparent border-none"
+          className="md:hidden -mr-2 p-2 cursor-pointer bg-transparent border-none"
           onClick={() => setMenuOpen((v) => !v)}
-          aria-label="Abrir menú"
+          aria-label={menuOpen ? 'Cerrar menú' : 'Abrir menú'}
           aria-expanded={menuOpen}
+          aria-controls="menu-movil"
         >
           <span
-            className={`block w-6 h-[2px] bg-navy my-[5px] transition-all duration-300 origin-center ${
-              menuOpen ? 'rotate-45 translate-y-[7px]' : ''
+            className={`block w-[18px] h-[1.5px] bg-ink my-[5px] transition-transform duration-300 origin-center ${
+              menuOpen ? 'rotate-45 translate-y-[3.25px]' : ''
             }`}
           />
           <span
-            className={`block w-6 h-[2px] bg-navy my-[5px] transition-all duration-300 ${
-              menuOpen ? 'opacity-0' : ''
-            }`}
-          />
-          <span
-            className={`block w-6 h-[2px] bg-navy my-[5px] transition-all duration-300 origin-center ${
-              menuOpen ? '-rotate-45 -translate-y-[7px]' : ''
+            className={`block w-[18px] h-[1.5px] bg-ink my-[5px] transition-transform duration-300 origin-center ${
+              menuOpen ? '-rotate-45 -translate-y-[3.25px]' : ''
             }`}
           />
         </button>
       </div>
 
-      {/* Mobile drawer */}
       {menuOpen && (
-        <div className="md:hidden flex flex-col bg-white px-6 py-6 shadow-lg gap-4">
-          {NAV_LINKS.map((link) => (
-            <Link
-              key={link.label}
-              href={linkHref(link)}
-              aria-current={isActive(link) ? 'page' : undefined}
-              className={`font-body text-[0.9rem] font-medium hover:text-navy transition-colors ${
-                isActive(link) ? 'text-navy' : 'text-gray-500'
-              }`}
-              onClick={closeMenu}
-            >
-              {link.label}
-            </Link>
-          ))}
+        <div id="menu-movil" className="md:hidden bg-white border-t border-black/[0.06] px-6 pt-4 pb-8">
+          <ul>
+            {NAV_LINKS.map((link) => (
+              <li key={link.label} className="border-b border-black/[0.08]">
+                <Link
+                  href={linkHref(link)}
+                  aria-current={isActive(link) ? 'page' : undefined}
+                  className="block py-4 text-[24px] font-semibold tracking-[-0.02em] text-ink"
+                  onClick={closeMenu}
+                >
+                  {link.label}
+                </Link>
+              </li>
+            ))}
+          </ul>
           <Link
             href={href('contacto')}
-            className="bg-teal text-white px-6 py-[10px] rounded-[8px] font-semibold text-[0.85rem] text-center"
+            className="mt-6 flex justify-center rounded-full bg-teal-deep text-white text-[17px] font-medium py-3"
             onClick={closeMenu}
           >
             Contactar
